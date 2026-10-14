@@ -1,0 +1,76 @@
+{
+  "appId": "node-beam-studio",
+  "attachments": [],
+  "canvas": {
+    "aspectRatio": {
+      "height": 9,
+      "mode": "preset",
+      "value": "16:9",
+      "width": 16
+    },
+    "mode": "finite",
+    "size": {
+      "height": 450,
+      "unit": "px",
+      "width": 800
+    }
+  },
+  "exportedAt": "2026-10-08T08:22:01.151Z",
+  "source": "toolcraft-settings",
+  "timeline": {
+    "currentTimeSeconds": 8,
+    "durationSeconds": 8,
+    "expanded": false,
+    "isLooping": true,
+    "isPlaying": false
+  },
+  "values": {
+    "export.includeBackground": true,
+    "beam.background": "#141518",
+    "canvas.workspaceBackground": "dots",
+    "canvas.renderScale": 2,
+    "beam.theme": "dark",
+    "beam.shape": "rounded",
+    "beam.aspect": "wide",
+    "beam.width": 640,
+    "beam.radius": 16,
+    "beam.motion": "orbit",
+    "beam.speed": 1,
+    "beam.easing": "linear",
+    "beam.palette": "fiora",
+    "beam.gradient": {
+      "angle": 0,
+      "gradientType": "angular",
+      "stops": [
+        {
+          "color": "#ED3696",
+          "opacity": 100,
+          "position": "0%"
+        },
+        {
+          "color": "#AF52E8",
+          "opacity": 100,
+          "position": "33%"
+        },
+        {
+          "color": "#5984F3",
+          "opacity": 100,
+          "position": "67%"
+        },
+        {
+          "color": "#28C4E7",
+          "opacity": 100,
+          "position": "100%"
+        }
+      ]
+    },
+    "beam.style": "soft",
+    "beam.borderWidth": 2,
+    "beam.spread": 28,
+    "beam.intensity": 55,
+    "beam.blur": 12,
+    "export.image.format": "png",
+    "export.image.resolution": "2k"
+  },
+  "version": 3
+}

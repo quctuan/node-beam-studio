@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "changeId": "f3f36cc2-81c8-4b9d-a850-769602439d42",
+  "revision": 2,
+  "createdAt": "2026-10-09T03:09:02.841Z",
+  "updatedAt": "2026-10-09T03:19:10.743Z",
+  "legacy": null,
+  "title": "Restore Dots contrast over a custom Background",
+  "request": {
+    "text": "Với đang bug, khi chọn workspace là Dots thì Background không hiện dots",
+    "messageRef": null
+  },
+  "owners": [
+    "src/app/beam-workspace.tsx",
+    "src/app/app-composition.tsx",
+    "e2e/beam-workspace.spec.ts"
+  ],
+  "decision": "Use the public Infinity preview port and native CanvasDotPattern primitive for contrast compensation only when the custom Background conflicts with the editor theme. Preserve native background ownership, pattern geometry, finite presentation, and accepted beam renderer.",
+  "result": "Dots contrast restored on the existing https://nodeanimation.vercel.app production site; reopened with Background on, #F6F7F8, Infinity on, Workspace Dots and dark editor. Screenshot confirms dots remain visible around the unchanged beam node.",
+  "checks": [
+    "Luminance regression unit test passed",
+    "Current production browser workspace scenario passed with signed evidence reporter, including pixel assertions, Blanc/Dots, light/dark backgrounds, Background off, pan and zoom",
+    "Local and Vercel production builds passed",
+    "Development files check passed",
+    "Live production site reopened and settings plus visible dots inspected"
+  ],
+  "risks": [
+    "The test:feature wrapper remained at load-feature-plan for more than seven minutes and was intentionally stopped. Its journal run remains incomplete; no protected feature receipt is claimed. The direct production browser scenario and signed evidence reporter passed."
+  ],
+  "status": "complete"
+}

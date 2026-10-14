@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "changeId": "c72e0911-2b4c-43ec-9693-6f75a6f26fe7",
+  "revision": 1,
+  "createdAt": "2026-10-13T17:20:10.003Z",
+  "updatedAt": "2026-10-13T17:20:10.003Z",
+  "legacy": null,
+  "title": "Perimeter Trail movement for node borders",
+  "request": {
+    "text": "a muốn tạo thêm effect beam node như dạng này, thêm 1 setting movement motion để ra dc hiệu ứng như clip trên threads, và tương tự như Magnific khi nối Node\nClarification: Chỉ vệt sáng chạy quanh viền node",
+    "messageRef": null
+  },
+  "owners": [
+    "src/app/beam-types.ts",
+    "src/app/beam-paint.ts",
+    "src/app/beam-schema.ts",
+    "src/app/beam-handoff.ts"
+  ],
+  "decision": "Add Trail as an additional native Movement option; preserve accepted Orbit; two smooth arc-distance highlights share phase and color with inward light. No connector workflow.",
+  "result": null,
+  "checks": [
+    "Focused profile/geometry/seam/native JSON/runtime parity and real browser Movement behavior"
+  ],
+  "risks": [
+    "Static Magnific reference does not establish a measured lap duration."
+  ],
+  "status": "open"
+}

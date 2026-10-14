@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "changeId": "6b572cd2-16a3-4428-9ff6-e9e5ae21c3ef",
+  "revision": 2,
+  "createdAt": "2026-10-13T02:59:08.203Z",
+  "updatedAt": "2026-10-13T03:21:09.494Z",
+  "legacy": null,
+  "title": "Admin-owned shared starting preset",
+  "request": {
+    "text": "thêm tính năng set as default, dể ai truy cập vào link cũng thấy được setting đã lưu",
+    "messageRef": null
+  },
+  "owners": [
+    "src/app/beam-shared-default-ui.tsx",
+    "src/app/beam-shared-default.ts",
+    "server/shared-default.ts",
+    "server/shared-default-handler.ts",
+    "src/app/beam-schema.ts"
+  ],
+  "decision": "Only the owner may publish shared defaults. Use private Blob storage, same-origin HttpOnly administrator sessions and native actions/public password input. Capture and apply the native settings codec; do not persist credentials in settings or alter the accepted beam.",
+  "result": "Version 1.2.0 deployed to https://nodeanimation.vercel.app/. Administrator-only Set as default persists canonical settings in private Blob storage. Current Light/Dots preset seeded; new visits receive it. Credentials remain server/session owned.",
+  "checks": [
+    "PASS: 3 focused unit checks and schema acceptance coverage",
+    "PASS: 2 production browser scenarios (9.2s), including fresh visitor/reload, admin/guest/failure and export secrecy",
+    "PASS: canonical product source boundary, no violations",
+    "PASS: final build, deployment alias and live API authentication/storage/public read",
+    "LIMITATION: protected feature wrapper timed out during plan loading; no protected feature pass claimed",
+    "PASS: online Shared Default panel visual inspection and screenshot"
+  ],
+  "risks": [
+    "Shared defaults apply on the next visit; already-open editing sessions keep their values."
+  ],
+  "status": "complete"
+}

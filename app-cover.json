@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "title": "Node Beam Studio",
+  "asset": "public/toolcraft/cover.png",
+  "generation": {
+    "kind": "app-composition",
+    "source": "src/app/app-composition.tsx",
+    "state": "app-cover-state.json",
+    "description": "Actual native PNG export: 800 × 450 finite frame, 640 × 360 dark rounded Fiora node, Soft style, held at 8.00s of the 8s loop (phase 0), exported at 2048 × 1152. No editor chrome. Exported settings retained without changing source defaults."
+  }
+}

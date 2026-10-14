@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "changeId": "78fb4f99-950c-4bbd-ab08-c80d58dba2f2",
+  "revision": 2,
+  "createdAt": "2026-10-09T02:23:42.210Z",
+  "updatedAt": "2026-10-09T03:01:16.017Z",
+  "legacy": null,
+  "title": "Fixed JSON settings footer and remove image export",
+  "request": {
+    "text": "Vậy cho cụm 2 button này xuống bên dưới, fixed position. Bỏ tính năng export PNG đi, ko cần thiết",
+    "messageRef": "/Users/tuanvq/.codex/sessions/2026/10/08/rollout-2026-10-08T09-14-22-01a1194a-4dd2-7a20-b9b5-4108a7ebd1fe.jsonl:4538"
+  },
+  "owners": [
+    "src/app/app-composition.tsx",
+    "src/app/beam-panel-presentation.ts",
+    "src/app/app-schema.ts",
+    "src/app/app-acceptance-data.ts",
+    "src/app/app-performance.ts"
+  ],
+  "decision": "Reuse the native settingsTransfer UI and codec in the native Panel footer via a presentation-only section projection. Remove image-export capability and export-only passes.",
+  "result": "Fixed native settings footer and JSON-only export deployed to the existing node-animation project at https://nodeanimation.vercel.app/. Live scrolling confirms fixed buttons and no Image Export section.",
+  "checks": [
+    "Three selected product unit checks passed",
+    "Production JSON/footer browser scenario passed with signed evidence reporter",
+    "Production Background/Infinity browser scenario passed",
+    "Local and Vercel production builds passed",
+    "Development file check passed",
+    "Live site reopened and footer scrolled; screenshot retained"
+  ],
+  "risks": [
+    "Footer placement is an app-owned projection because the runtime settingsTransfer schema has no placement flag.",
+    "The test:feature wrapper twice exceeded its protected 20000ms load-feature-plan deadline; no protected feature receipt is claimed. Direct production browser behavior and signed evidence checks passed."
+  ],
+  "status": "complete"
+}

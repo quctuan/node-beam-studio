@@ -1,0 +1,12 @@
+.inspector { font-size: 12px; }
+.note { margin: 0 0 12px; color: var(--muted-foreground); line-height: 1.5; }
+.parameters { margin: 0; display: grid; gap: 8px; }
+.row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+.row dt { color: var(--muted-foreground); }
+.row dd { margin: 0; font-variant-numeric: tabular-nums; text-align: right; }
+.plot { margin: 16px 0; border: 1px solid var(--toolcraft-custom-viz-border); border-radius: var(--radius-lg); background: var(--toolcraft-custom-viz-surface); overflow: hidden; }
+.plot svg { display: block; width: 100%; }
+.grid { fill: none; stroke: var(--toolcraft-custom-viz-grid); stroke-width: 1; }
+.curve { fill: none; stroke: var(--toolcraft-custom-viz-line-strong); stroke-width: 2; }
+.axis { display: flex; justify-content: space-between; gap: 8px; padding: 0 12px 12px; color: var(--muted-foreground); font-size: 11px; font-variant-numeric: tabular-nums; }
+.code { margin: 12px 0 0; max-height: 280px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 11px; line-height: 1.5; }

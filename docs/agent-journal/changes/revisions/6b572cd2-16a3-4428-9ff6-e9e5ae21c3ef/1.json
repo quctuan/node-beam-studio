@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "changeId": "6b572cd2-16a3-4428-9ff6-e9e5ae21c3ef",
+  "revision": 1,
+  "createdAt": "2026-10-13T02:59:08.203Z",
+  "updatedAt": "2026-10-13T02:59:08.203Z",
+  "legacy": null,
+  "title": "Admin-owned shared starting preset",
+  "request": {
+    "text": "thêm tính năng set as default, dể ai truy cập vào link cũng thấy được setting đã lưu",
+    "messageRef": null
+  },
+  "owners": [
+    "src/app/beam-shared-default-ui.tsx",
+    "src/app/beam-shared-default.ts",
+    "server/shared-default.ts",
+    "server/shared-default-handler.ts",
+    "src/app/beam-schema.ts"
+  ],
+  "decision": "Only the owner may publish shared defaults. Use private Blob storage, same-origin HttpOnly administrator sessions and native actions/public password input. Capture and apply the native settings codec; do not persist credentials in settings or alter the accepted beam.",
+  "result": null,
+  "checks": [
+    "Server authentication/validation/failure tests",
+    "Focused admin/publish/fresh visitor/browser source checks",
+    "Production build and public API verification"
+  ],
+  "risks": [
+    "Shared defaults apply on the next visit; already-open editing sessions keep their values."
+  ],
+  "status": "open"
+}

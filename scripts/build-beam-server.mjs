@@ -1,0 +1,10 @@
+import { build } from 'esbuild';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+const stage = process.argv[2];
+if (!stage) throw new Error('Pass the Vercel staging directory.');
+const output = path.join(stage, '.vercel/output/functions/api/shared-default.func');
+await fs.mkdir(output, { recursive: true });
+await build({ entryPoints: ['server/shared-default.ts'], outfile: path.join(output, 'index.cjs'), bundle: true, platform: 'node', format: 'cjs', target: 'node22', minify: true, alias: { '@': path.resolve('src') } });
+await fs.writeFile(path.join(output, '.vc-config.json'), JSON.stringify({ runtime: 'nodejs22.x', handler: 'index.cjs', launcherType: 'Nodejs', maxDuration: 30, shouldAddHelpers: true }, null, 2));
+console.log('Server function bundled without client secrets.');

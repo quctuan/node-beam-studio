@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "changeId": "d4a60a22-e945-4e7a-8704-25e2d5f685b4",
+  "revision": 1,
+  "createdAt": "2026-10-13T04:11:48.784Z",
+  "updatedAt": "2026-10-13T04:11:48.784Z",
+  "legacy": null,
+  "title": "Public shared preset library without administrator access",
+  "request": {
+    "text": "- Phức tạp quá nhỉ, khỏi cần như vậy, mở bung ra cho tôi đi. Ai vào cũng đươc, bỏ hết khoá hay admin gì đó đi cho lưu thành từng set là được rồi.\n- Vẫn giữ tính năng Set as default, để ai vào link cũng thấy\n- Quản lý các setting đã lưu. chọn 1 setting đã lưu là mở ra được các thông số đã chọn đó",
+    "messageRef": null
+  },
+  "owners": [
+    "src/app/beam-shared-default-ui.tsx",
+    "src/app/beam-shared-default.ts",
+    "src/app/beam-shared-default-schema.ts",
+    "server/shared-default-handler.ts",
+    "server/preset-library.ts",
+    "server/shared-default.ts"
+  ],
+  "decision": "Explicitly remove login and administrator keys. Preserve the previous default through migration, store named shared settings snapshots, let everyone save/select/rename/recoverably delete/restore and publish defaults. Use canonical codecs and conditional Blob writes.",
+  "result": null,
+  "checks": [
+    "Focused migration, public mutations, concurrent writes and failure units",
+    "Preset selection/management/default fresh-visitor browser scenarios",
+    "Source boundary, build, actual live public API and UI verification"
+  ],
+  "risks": [
+    "All visitors may edit the shared library as explicitly requested. Deletion is recoverable."
+  ],
+  "status": "open"
+}

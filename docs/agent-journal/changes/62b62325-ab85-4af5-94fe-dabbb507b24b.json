@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "changeId": "62b62325-ab85-4af5-94fe-dabbb507b24b",
+  "revision": 2,
+  "createdAt": "2026-10-13T17:46:46.230Z",
+  "updatedAt": "2026-10-14T00:58:24.150Z",
+  "legacy": null,
+  "title": "Correct Trail to split at left and converge/fade at right",
+  "request": {
+    "text": "Chưa đúng effect rồi, 2 vệt sáng sẽ xuất phát tại điểm giữa của cạnh trái node, toả đi 2 hướng khác nhau, sau đó hội tụ và kết thúc ở điểm giữa cạnh phải node. Vệt sáng mờ dần và biến mất",
+    "messageRef": null
+  },
+  "owners": [
+    "src/app/beam-paint.ts",
+    "src/app/beam-handoff.ts",
+    "src/app/beam-handoff-inspector.tsx",
+    "src/app/beam-schema.ts"
+  ],
+  "decision": "Correct existing Trail with shared left midpoint, opposite half-perimeter paths, right midpoint stop and complete fade. Preserve Orbit and presets/JSON.",
+  "result": "Version 1.4.1 deployed to https://nodeanimation.vercel.app/ (dpl_9SqjXAbffXkhkoxSNGFU3jExaVPv), entry /assets/index-CnUcJDDm.js. Live Trail inspected and left playing; screenshot .toolcraft/browser-artifacts/nodeanimation-trail-converge.jpg. Two fronts share left origin, opposite half-paths and right convergence; border and inward light fade completely. Shared defaults unchanged.",
+  "checks": [
+    "9 Trail/handoff units passed",
+    "6 directly selected browser scenarios passed: Light/Dark split-converge-fade stages, Light/Dark geometry/seam, JSON renderer parity, exact legacy Orbit pixels",
+    "TypeScript/Vite build and canonical product source boundary passed",
+    "Production asset and live UI verified",
+    "Protected feature retry stalled at Node ESM resolution and was terminated; no protected receipt or measured performance claimed"
+  ],
+  "risks": [],
+  "status": "complete"
+}

@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "changeId": "b2af177e-c936-433b-9461-9659543fff5d",
+  "revision": 1,
+  "createdAt": "2026-10-12T13:32:13.639Z",
+  "updatedAt": "2026-10-12T13:32:13.639Z",
+  "legacy": null,
+  "title": "Developer handoff with procedural motion and executable renderer",
+  "request": {
+    "text": "hiện tại file json export ra đang gặp các vấn đề trên, hãy fix cho tôi, hoặc có giải cách hiển thị nào trên tool để t nắm rõ được các thông số",
+    "messageRef": null
+  },
+  "owners": [
+    "src/app/beam-handoff.ts",
+    "src/app/beam-handoff-inspector.tsx",
+    "src/app/beam-runtime-entry.ts",
+    "src/app/beam-schema.ts",
+    "src/app/app-composition.tsx"
+  ],
+  "decision": "Keep native settings JSON and fixed footer. Add a derived developer document as a schema-owned custom visualization value; include effective timing, reference motion samples, optical formulas and a self-contained runtime compiled from the same painter. Use native actions for clipboard spec and runnable HTML. Preserve accepted painter and do not add optional image/video export.",
+  "result": null,
+  "checks": [
+    "Timing, static/ease/loop and schema unit checks",
+    "Focused native JSON export/import, clipboard and standalone renderer pixel parity in browser",
+    "Production build and stable Vercel bundle verification"
+  ],
+  "risks": [
+    "Sampled motion keyframes are reference data, not a replacement for the procedural renderer. Exact Canvas2D implementation is included."
+  ],
+  "status": "open"
+}

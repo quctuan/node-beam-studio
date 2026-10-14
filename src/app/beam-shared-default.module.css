@@ -1,0 +1,7 @@
+.library { display: grid; gap: 8px; font-size: 12px; }
+.status { color: var(--muted-foreground); }
+.list { max-height: 196px; overflow-y: auto; }
+.option { width: 100%; justify-content: flex-start; text-align: left; }
+.utilities { display: flex; justify-content: space-between; }
+.trash { display: grid; gap: 4px; }
+.deletedRow { display: flex; align-items: center; justify-content: space-between; gap: 8px; }

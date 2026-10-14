@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "changeId": "c72e0911-2b4c-43ec-9693-6f75a6f26fe7",
+  "revision": 2,
+  "createdAt": "2026-10-13T17:20:10.003Z",
+  "updatedAt": "2026-10-13T17:40:43.120Z",
+  "legacy": null,
+  "title": "Perimeter Trail movement for node borders",
+  "request": {
+    "text": "a muốn tạo thêm effect beam node như dạng này, thêm 1 setting movement motion để ra dc hiệu ứng như clip trên threads, và tương tự như Magnific khi nối Node\nClarification: Chỉ vệt sáng chạy quanh viền node",
+    "messageRef": null
+  },
+  "owners": [
+    "src/app/beam-types.ts",
+    "src/app/beam-paint.ts",
+    "src/app/beam-schema.ts",
+    "src/app/beam-handoff.ts"
+  ],
+  "decision": "Add Trail as an additional native Movement option; preserve accepted Orbit; two smooth arc-distance highlights share phase and color with inward light. No connector workflow.",
+  "result": "Trail added to native Movement, deployed at https://nodeanimation.vercel.app/ version 1.4.0. Shared presets/default preserved. Exact Orbit regression and Trail export pixels passed.",
+  "checks": [
+    "9 focused Trail and handoff units passed; focused schema coverage passed",
+    "7 unique production-browser checks passed including Light/Dark geometry/seam, exact Orbit 1.3.1 pixels and Trail renderer/JSON parity",
+    "Canonical source boundary and TypeScript/Vite build passed",
+    "Live public entry and shared API verified; Light/Dark UI inspected",
+    "Protected feature loader fixed 20s deadline expired; no feature receipt or measured performance claimed"
+  ],
+  "risks": [
+    "Static Magnific reference does not establish a measured lap duration."
+  ],
+  "status": "complete"
+}

@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "changeId": "f3f36cc2-81c8-4b9d-a850-769602439d42",
+  "revision": 1,
+  "createdAt": "2026-10-09T03:09:02.841Z",
+  "updatedAt": "2026-10-09T03:09:02.841Z",
+  "legacy": null,
+  "title": "Restore Dots contrast over a custom Background",
+  "request": {
+    "text": "Với đang bug, khi chọn workspace là Dots thì Background không hiện dots",
+    "messageRef": null
+  },
+  "owners": [
+    "src/app/beam-workspace.tsx",
+    "src/app/app-composition.tsx",
+    "e2e/beam-workspace.spec.ts"
+  ],
+  "decision": "Use the public Infinity preview port and native CanvasDotPattern primitive for contrast compensation only when the custom Background conflicts with the editor theme. Preserve native background ownership, pattern geometry, finite presentation, and accepted beam renderer.",
+  "result": null,
+  "checks": [
+    "Focused workspace regression with Background on/off, light/dark fills, Blanc/Dots and pan/zoom",
+    "Production build for existing Vercel deployment"
+  ],
+  "risks": [],
+  "status": "open"
+}
