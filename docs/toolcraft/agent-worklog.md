@@ -1,3 +1,16 @@
+## Save selected preset snapshot — 2026-10-18
+
+Active change: preset-save-snapshot-20261018
+Request: “sửa cho tôi, khi bấm save preset, thì mọi thông số đều phải được lưu lại”.
+Root cause: Save always generated a new ID, and the server treated an existing save ID as an idempotent no-op. Reusing a name therefore failed or left old settings untouched.
+Decision: With the selected name unchanged, reuse its ID and replace its entire canonical settings payload plus playback flag. A different name retains the existing save-copy workflow. Saving does not alter the shared startup selection. Preserve creation time, duplicate-name validation, recoverable deletion and conditional-write retries.
+Owners: src/app/beam-shared-default-ui.tsx, beam-shared-default-schema.ts, server/shared-default-handler.ts and focused preset tests.
+Contracts: workflow, core/control-selection, core/layout, schema-reference, component-rules, acceptance-testing. systematic-debugging is unavailable; prior live reproduction and server/client tracing establish the root cause. No runtime or generated contract edits.
+Verification tier: Tier 2 later persistence/action fix.
+Run: Preset unit tests and focused beam.presetName / beam.defaultActions browser acceptance, including Speed 1.5 after a real reload and preset reopen, complete server snapshot equality and failed-save preservation.
+Skip: Aggregate delivery and measured performance; renderer and workload are unchanged.
+Verification: Seven preset unit tests passed, including exact full snapshot equality for Speed 1.5, geometry, background, canvas size, timeline and playback; conditional retry and failed-update preservation passed. Two focused headless Chrome browser cases passed (29.5s total), including native Save, reload, reopen, Speed 1.5, Dark mode, copy creation, duplicate-name rejection, default selection and failure preservation. TypeScript/Vite production build passed. The protected test:feature run 490fe828-7ff4-40c6-bfea-760d8eac2c6a stalled at load-feature-plan as in prior project history and was stopped; the corresponding two browser descriptors were run directly, with no protected feature receipt claimed. Chromium download was stopped after the installed Chrome provided successful proof. The temporary Chrome channel override was removed because product tests must retain the protected test wrapper; final product source boundary passed for all 26 production files. After user-authorized Vercel login and deployment, production deployment dpl_F9jygJV8voxihMEG5sZqSK8YLSNx is READY on the existing node-animation project and nodeanimation.vercel.app alias. The public site serves the matching /assets/index-DAzH5vJ2.js entry (HTTP 200); the bundled Node API also returns HTTP 200 and preserves Loading node as default. Anonymous browser inspection opens Connected node with its saved Speed 1. Production Save verification was rejected by automatic approval review because overwriting the shared preset was not explicitly authorized; no production preset data was changed. Local browser Save/reload proof remains valid.
+
 ## Trail split and convergence correction — 2026-10-14
 
 Active change: 62b62325-ab85-4af5-94fe-dabbb507b24b

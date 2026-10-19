@@ -65,14 +65,16 @@ export function createSharedDefaultHandler(options: { storage: PresetStorage; va
         if (preset?.deletedAt && operation !== 'restore') throw new RequestError(409, 'This preset has been deleted. Restore it first.');
         if (['save', 'rename'].includes(operation) && library.presets.some(item => !item.deletedAt && item.id !== newId && item.name.toLocaleLowerCase() === name.toLocaleLowerCase())) throw new RequestError(409, 'This name is already used. Choose another name.');
         if (operation === 'save' || operation === 'set-default') {
-          if (operation === 'save' && preset) return send(res, 200, { library, selectedId: preset.id });
           if (!preset) {
             if (library.presets.length >= 100) throw new RequestError(409, 'The shared library has reached 100 presets.');
             let nextName = name || `Preset ${library.presets.length + 1}`;
             if (library.presets.some(item => !item.deletedAt && item.name.toLocaleLowerCase() === nextName.toLocaleLowerCase())) nextName = `Preset ${stamp}`;
             preset = { id: newId, name: nextName, settings, playing: input.playing as boolean, createdAt: stamp, updatedAt: stamp };
             library.presets.push(preset);
-          } else { preset.settings = settings; preset.playing = input.playing as boolean; preset.updatedAt = stamp; }
+          } else {
+            preset.settings = settings; preset.playing = input.playing as boolean; preset.updatedAt = stamp;
+            if (operation === 'save') preset.name = name;
+          }
           if (operation === 'set-default') library.defaultPresetId = preset.id;
         }
         if (operation === 'rename' && preset) { preset.name = name; preset.updatedAt = stamp; }

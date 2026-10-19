@@ -137,7 +137,7 @@ export const appAcceptance: readonly ToolcraftComponentAcceptance[] = [
     browser: { file: "e2e/beam-shared-default.spec.ts", testName: "browser: public preset names save named settings snapshots", budget: "standard" },
     evidence: "command-side-effect", fixture: "Edited effect and native Preset name field",
     userAction: "Name the current settings and save a preset.",
-    expectedObservable: "The server-saved set uses the entered name and exact settings; empty or duplicate names produce actionable errors.",
+    expectedObservable: "Save updates every setting in the selected preset when its name is unchanged, including fractional speed after reload; a different name creates a copy, and empty or conflicting names produce actionable errors.",
   },
   {
     id: "beam.defaultActions", target: "beam.defaultActions", kind: "control", componentType: "actions",

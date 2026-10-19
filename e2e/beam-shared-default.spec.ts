@@ -84,9 +84,25 @@ test('browser: public preset names save named settings snapshots', async ({ page
   const saved = api.library.presets.find(preset => preset.name === 'Named snapshot')!;
   expect((saved.settings as { values: Record<string, unknown> }).values['beam.speed']).toBe(speed);
   expect((saved.settings as { values: Record<string, unknown> }).values).not.toHaveProperty('beam.presetName');
+  const id = saved.id;
+  await page.getByRole('button', { name: 'Edit Speed value', exact: true }).click();
+  await page.getByRole('textbox', { name: 'Speed value', exact: true }).fill('1.5');
+  await page.getByRole('textbox', { name: 'Speed value', exact: true }).press('Enter');
+  await selectBeamValue(page, 'beam.theme', 'dark');
+  await page.getByRole('button', { name: 'Save preset', exact: true }).click();
+  await expect.poll(() => (api.library.presets.find(preset => preset.id === id)!.settings as { values: Record<string, unknown> }).values['beam.speed']).toBe(1.5);
+  expect(api.library.defaultPresetId).toBe('slow');
+  expect(api.library.presets.filter(preset => preset.name === 'Named snapshot')).toHaveLength(1);
+  const updated = structuredClone(api.library.presets.find(preset => preset.id === id)!.settings);
+  await page.reload();
+  await expect(page.getByRole('button', { name: 'Slow · Default', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Named snapshot', exact: true }).click();
+  await expect(page.getByRole('slider', { name: 'Speed', exact: true })).toHaveAttribute('aria-valuenow', '1.5');
+  await expect(page.locator('[data-toolcraft-control-target="beam.theme"]').getByRole('button', { name: 'Dark', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  expect(api.library.presets.find(preset => preset.id === id)!.settings).toEqual(updated);
+  await nameField(page).fill('Slow');
   await page.getByRole('button', { name: 'Save preset', exact: true }).click();
   await expect(page.getByText('This name is already used. Choose another name.', { exact: false })).toBeVisible();
-  expect(api.library.presets.filter(preset => preset.name === 'Named snapshot')).toHaveLength(1);
 });
 
 test('browser: public default preset opens for fresh visitors', async ({ page }) => {

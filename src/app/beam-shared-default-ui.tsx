@@ -86,8 +86,11 @@ export const sharedDefaultActionHandler: ToolcraftPanelActionHandler = async ({ 
     if (['save', 'rename'].includes(operation) && !name) throw new Error('Enter a preset name first.');
     if (['rename', 'delete'].includes(operation) && !selectedId) throw new Error('Choose a saved preset first.');
     const settings = captureSharedSettings(state);
+    const selected = getSharedDefaultStatus().library?.presets[selectedId ?? ''];
+    const saveId = selected && !selected.deletedAt && selected.name.toLocaleLowerCase() === name.toLocaleLowerCase()
+      ? selected.id : crypto.randomUUID();
     reportProgress(0.2);
-    const result = await sharedDefaultRequest({ operation, id: operation === 'save' ? crypto.randomUUID() : selectedId, name, ...(['save', 'set-default'].includes(operation) ? { settingsJson: JSON.stringify(settings), playing: state.timeline.isPlaying } : {}) });
+    const result = await sharedDefaultRequest({ operation, id: operation === 'save' ? saveId : selectedId, name, ...(['save', 'set-default'].includes(operation) ? { settingsJson: JSON.stringify(settings), playing: state.timeline.isPlaying } : {}) });
     if (result.selectedId) {
       dispatch({ type: 'controls.setValue', target: sharedDefaultTarget, value: result.selectedId, history: 'skip' });
       const preset = Object.values(result.library.presets).find(item => item.id === result.selectedId);

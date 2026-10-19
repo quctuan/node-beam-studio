@@ -80,6 +80,33 @@ test('concurrent visitor saves and conditional retries never drop another set', 
   await api.call({ operation: 'save', id: 'a', name: 'a', settings: snapshot, playing: false });
   expect(api.library.presets).toHaveLength(2);
 });
+test('saving an existing preset replaces the entire snapshot without changing the default', async () => {
+  const api = fixture();
+  const original = settings();
+  await api.call({ operation: 'set-default', id: 'startup', name: 'Startup', settings: original, playing: false });
+  await api.call({ operation: 'save', id: 'connected', name: 'Connected node', settings: original, playing: false });
+  const createdAt = api.library.presets.find(preset => preset.id === 'connected')!.createdAt;
+  const base = settings();
+  const snapshot = { ...base, canvas: { ...base.canvas, size: { ...base.canvas.size, width: 800, height: 600 } } };
+  Object.assign(snapshot.values, { 'beam.speed': 1.5, 'beam.theme': 'dark', 'beam.motion': 'trail', 'beam.width': 420, 'beam.palette': 'custom', 'beam.background': '#123456' });
+  snapshot.timeline.durationSeconds = 24;
+  snapshot.timeline.currentTimeSeconds = 3;
+  expect(validateSharedSettings(snapshot)).not.toBeNull();
+  api.conflict = true;
+  const result = await api.call({ operation: 'save', id: 'connected', name: 'Connected node', settingsJson: JSON.stringify(snapshot), playing: true });
+  expect(result.status).toBe(200);
+  expect(result.body.selectedId).toBe('connected');
+  expect(api.library.presets).toHaveLength(2);
+  expect(api.library.defaultPresetId).toBe('startup');
+  const restored = JSON.parse((await api.call()).body.library.presets.connected.settingsJson);
+  expect(restored).toEqual(snapshot);
+  expect(restored.values['beam.speed']).toBe(1.5);
+  expect(api.library.presets.find(preset => preset.id === 'connected')).toMatchObject({ createdAt, playing: true });
+  expect(api.library.presets.find(preset => preset.id === 'startup')!.settings).toEqual(original);
+  api.fail = true;
+  expect((await api.call({ operation: 'save', id: 'connected', name: 'Connected node', settings: original, playing: false })).status).toBe(503);
+  expect(JSON.parse((await api.call()).body.library.presets.connected.settingsJson)).toEqual(snapshot);
+});
 test('invalid public writes and storage failures preserve all prior sets', async () => {
   const api = fixture(); const snapshot = settings();
   await api.call({ operation: 'save', id: 'first', name: 'First', settings: snapshot, playing: false });
