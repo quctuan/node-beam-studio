@@ -1,9 +1,9 @@
 {
   "version": 1,
   "changeId": "b06c5537-adb7-4db0-a12f-4bc0180377e0",
-  "revision": 1,
+  "revision": 2,
   "createdAt": "2026-10-20T02:12:15.519Z",
-  "updatedAt": "2026-10-20T02:12:15.519Z",
+  "updatedAt": "2026-10-20T02:38:35.287Z",
   "legacy": null,
   "title": "Edit gradient stops independently for every palette",
   "request": {
@@ -17,12 +17,15 @@
     "src/app/beam-handoff.ts"
   ],
   "decision": "Reuse one mutually exclusive native gradient editor for each named palette, persisted under separate canonical targets. Seed Fiora from the current shared Loading node Custom gradient: Linear 0deg, #EC379A at 0%, #F58FC5 at 100%, both 100% opacity. Preserve legacy beam.gradient for Custom and feed authored stops to border and inward light with unchanged movement/exposure.",
-  "result": null,
+  "result": "Independent editable stops for Fiora/Spectrum/Cyan/Custom; Fiora adopts the saved Custom pink linear gradient. Source synchronized with home Mac mini commit 6210485, published to main, deployed version 1.5.0 to https://nodeanimation.vercel.app/ as dpl_8JdTFGJarguRcX9XYHzFmoeSX6GB. Public bundle and API verified; live Spectrum edit/Undo and Fiora seed inspected. Shared defaults unchanged.",
   "checks": [
-    "Focused palette/codec/handoff units; real native gradient parts and switch-back preservation; focused feature gate; local preview; publication comparison"
+    "41 focused settings, palette, exact handoff and preset unit tests passed",
+    "8 unique direct browser scenarios passed for all five gradient parts and independent switch-back/native JSON/handoff values across every palette",
+    "Final merged TypeScript/Vite production build passed; files:check and git diff --check passed",
+    "Latest upstream baseline reproduced both production JS bundles byte-for-byte before integration",
+    "Live HTTP 200, correct entry /assets/index-DS8Y9hVz.js, preset API/default preservation and manual Spectrum edit/Undo verified",
+    "Protected feature loader hit unchanged 20s deadline; no protected feature receipt or measured performance claimed"
   ],
-  "risks": [
-    "The current production deployment was built on the home Mac mini and its updated runtime source is absent here. Do not redeploy this older runtime over the current live Dots fix."
-  ],
-  "status": "open"
+  "risks": [],
+  "status": "complete"
 }
