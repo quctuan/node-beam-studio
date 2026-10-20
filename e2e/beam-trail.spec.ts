@@ -91,6 +91,9 @@ for (const theme of ["light", "dark"]) {
 test("browser: accepted Orbit remains pixel identical to version 1.3.1", async ({ page }) => {
   await openBeamProof(page);
   await selectBeamValue(page, "beam.motion", "orbit");
+  // Palette defaults intentionally change; compare the unchanged accepted
+  // Orbit window with the same authored Custom gradient in both renderers.
+  await selectBeamValue(page, "beam.palette", "custom");
   const pending = page.waitForEvent("download");
   await page.getByRole("button", { name: "Export Settings", exact: true }).click();
   const file = await (await pending).path();

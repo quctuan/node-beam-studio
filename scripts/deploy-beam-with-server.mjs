@@ -22,7 +22,7 @@ try { await fs.access(snapshot); throw new Error(`Version snapshot ${version} al
 const excluded = new Set(['node_modules', '.vercel', '.toolcraft', '.git', 'test-results', 'playwright-report', '.DS_Store']);
 await fs.cp(root, snapshot, { recursive: true, filter: source => !excluded.has(path.basename(source)) && !path.basename(source).startsWith('.env') });
 await fs.cp(output, path.join(snapshot, 'vercel-output'), { recursive: true });
-const release = { version, productionUrl: 'https://nodeanimation.vercel.app/', state: 'ready-to-deploy', feature: 'Split Trail from left midpoint to right midpoint with complete synchronized fade' };
+const release = { version, productionUrl: 'https://nodeanimation.vercel.app/', state: 'ready-to-deploy', feature: 'Independent editable gradients for every palette; Fiora adopts saved Custom pink setup' };
 await fs.writeFile(path.join(snapshot, 'release.json'), JSON.stringify(release, null, 2));
 console.log(`Version ${version}; prebuilt static app + server function staged without Git or secrets.`);
 await new Promise((resolve, reject) => {

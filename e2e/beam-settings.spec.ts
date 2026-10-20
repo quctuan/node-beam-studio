@@ -65,7 +65,8 @@ test("browser: fixed settings footer restores JSON without image export", async 
     "beam.theme": "dark", "beam.shape": "circle", "beam.palette": "cyan", "beam.style": "neon",
     "beam.speed": 1.25, "beam.spread": 29, "beam.borderWidth": 2.5, "beam.radius": 16,
   });
-  expect(preset.values["beam.gradient"].stops).toHaveLength(4);
+  expect(preset.values["beam.gradient"].stops).toHaveLength(2);
+  expect(preset.values["beam.cyanGradient"].stops).toHaveLength(4);
   expect(preset.timeline.isPlaying).toBe(false);
   expect(preset.timeline.durationSeconds).toBeCloseTo(47.04);
 
