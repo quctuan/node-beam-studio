@@ -28,7 +28,9 @@ export async function openBeamProof(page: Page) {
 }
 
 export async function selectBeamValue(page: Page, target: string, value: string | number | boolean) {
-  const field = await getToolcraftControlFieldByTarget(page, target);
+  const field = target.startsWith("beam.")
+    ? page.locator(`[data-toolcraft-control-target="${target}"]`)
+    : await getToolcraftControlFieldByTarget(page, target);
   await field.scrollIntoViewIfNeeded();
   const schema = findBeamControl(target);
   if (!schema) throw new Error(`Unknown control ${target}`);

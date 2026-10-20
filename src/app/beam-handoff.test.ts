@@ -5,19 +5,20 @@ import { createToolcraftState } from "@/toolcraft/runtime";
 import { appSchema } from "./app-schema";
 import { beamHandoffTarget, createBeamHandoff, createPreviewHtml } from "./beam-handoff";
 import { getBeamPhase } from "./beam-paint";
-import { referenceHue, referenceTransportSeconds } from "./beam-reference";
+import { referenceTransportSeconds } from "./beam-reference";
 import { resolveBeamSettings } from "./beam-types";
 
 test("developer handoff supplies effective motion and exact renderer", () => {
   const doc = createBeamHandoff({});
   expect(doc.motion.rotationPeriodSeconds).toBeCloseTo(1.96, 8);
-  expect(doc.motion.hue.periodSeconds).toBeCloseTo(11.76, 8);
+  expect(doc.motion.hue.periodSeconds).toBeNull();
+  expect(doc.motion.hue.active).toBe(false);
   expect(doc.optics.inwardGlow.effectiveReachPx).toBeCloseTo(47.2, 8);
   expect(doc.motion.keyframes.rotation).toHaveLength(33);
   for (const frame of doc.motion.keyframes.rotation) {
     expect(frame.phase).toBeCloseTo(getBeamPhase(frame.timeSeconds / referenceTransportSeconds, resolveBeamSettings({}), referenceTransportSeconds), 8);
   }
-  for (const frame of doc.motion.keyframes.hue) expect(frame.hueDegrees).toBeCloseTo(referenceHue(frame.timeSeconds / referenceTransportSeconds, referenceTransportSeconds), 8);
+  expect(doc.motion.keyframes.hue).toEqual([{ timeSeconds: 0, hueDegrees: 0 }]);
   const build = buildSync({ entryPoints: ["src/app/beam-runtime-entry.ts"], bundle: true, write: false, format: "iife", globalName: "NodeBeam", target: "es2020", minify: true });
   expect(doc.implementation.javascript).toBe(build.outputFiles[0].text);
 });
@@ -38,7 +39,7 @@ test("developer handoff handles retiming static custom and zero glow", () => {
   const custom = createBeamHandoff({ "beam.palette": "custom" });
   expect(custom.motion.hue.active).toBe(false);
   expect(custom.optics.colorField).toMatchObject({ filterApplied: false, saturation: 1, brightness: 1, carrierStops: [] });
-  expect(createBeamHandoff({ "beam.palette": "spectrum" }).optics.colorField.spots[0].color).toBe("#FF3264");
+  expect(createBeamHandoff({ "beam.palette": "spectrum" }).optics.colorField).toMatchObject({ kind: "authored-gradient", spots: [], filterApplied: false });
 });
 
 test("native JSON carries fresh motion data without breaking older presets", () => {

@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { beamSections } from "./beam-schema";
-import { beamDefaults, beamTargets, resolveBeamSettings } from "./beam-types";
+import { beamDefaults, beamTargets, beamPaletteGradientTargets, resolveBeamSettings } from "./beam-types";
 
 const customGradient = {
   angle: 72,
@@ -25,6 +25,9 @@ const settingsCases = [
   { target: beamTargets.easing, field: "easing", type: "segmented", edited: "ease" },
   { target: beamTargets.palette, field: "palette", type: "select", edited: "custom" },
   { target: beamTargets.gradient, field: "gradient", type: "gradient", edited: customGradient },
+  { target: beamTargets.fioraGradient, field: "gradient", type: "gradient", edited: customGradient },
+  { target: beamTargets.spectrumGradient, field: "gradient", type: "gradient", edited: customGradient },
+  { target: beamTargets.cyanGradient, field: "gradient", type: "gradient", edited: customGradient },
   { target: beamTargets.style, field: "style", type: "segmented", edited: "neon" },
   { target: beamTargets.borderWidth, field: "borderWidth", type: "slider", edited: 5.5 },
   { target: beamTargets.spread, field: "spread", type: "slider", edited: 80 },
@@ -38,8 +41,9 @@ test(`${target} has a canonical editable product contract`, () => {
   const control = beamSections.flatMap((section) => Object.values(section.controls)).find((entry) => entry.target === target);
   expect(control, "Every accepted product operation has one schema-owned control").toBeDefined();
   expect(control?.type).toBe(type);
-  expect(control?.defaultValue).toEqual(beamDefaults[field]);
-  const input: Record<string, unknown> = { [target]: edited, ...(target === beamTargets.gradient ? { [beamTargets.palette]: "custom" } : {}) };
+  const defaultKey = Object.entries(beamTargets).find(([, value]) => value === target)![0] as keyof typeof beamDefaults;
+  expect(control?.defaultValue).toEqual(beamDefaults[defaultKey]);
+  const input: Record<string, unknown> = { [target]: edited, ...(type === "gradient" ? { [beamTargets.palette]: Object.entries(beamPaletteGradientTargets).find(([, value]) => value === target)![0] } : {}) };
   const settings = resolveBeamSettings(input);
   expect(settings[field], "The renderer receives the exact canonical edited value").toEqual(edited);
   expect(input[target], "Reading settings must not overwrite runtime or hidden values").toEqual(edited);
@@ -68,10 +72,10 @@ describe("Node beam canonical settings", () => {
     expect(values[beamTargets.motion]).toBe("static");
   });
 
-  test("uses the Fiora four-color spectrum and visible 380px Light node at reference speed", () => {
+  test("uses the saved Custom pink gradient for Fiora and the reference motion cadence", () => {
     expect(resolveBeamSettings({})).toMatchObject({
       theme: "light", shape: "rounded", width: 380, radius: 16, motion: "orbit", speed: 1,
-      borderWidth: 2, palette: "fiora", colors: ["#ED3696", "#AF52E8", "#5984F3", "#28C4E7"],
+      borderWidth: 2, palette: "fiora", colors: ["#EC379A", "#F58FC5"],
       includeBackground: false,
     });
   });

@@ -1,3 +1,13 @@
+## Editable palette gradients — 2026-10-20
+
+Active change: b06c5537-adb7-4db0-a12f-4bc0180377e0.
+Request: All palettes allow stop edits; Fiora adopts current Custom colors.
+Decision: Native gradient controls with mutually exclusive palette applicability and independent runtime targets; Custom keeps beam.gradient. Fiora source is the public saved Loading node snapshot read on 20/10: Linear 0°, #EC379A 0% and #F58FC5 100%, both opaque. Only one palette editor is visible, so panel density stays unchanged. No custom controls or duplicate canvas UI. Authored type/angle/stops/opacity feed the existing shared optical sample; movement/exposure and renderer resources unchanged.
+Contracts: AGENTS.md, workflow, control-selection, layout, schema-reference, component-rules, acceptance-testing; existing Toolcraft UI reused.
+Verification tier: Tier 2 later schema/settings behavior, plus focused color sampling and exact standalone handoff checks because palette edits now reach the renderer. No aggregate/performance run. Build only for the changed standalone runtime and preview.
+Source synchronization: Fetched origin/main 6210485 from the home Mac mini. Its isolated baseline build reproduces the production index-DAzH5vJ2.js and app-bootstrap-yz0hMvoK.js byte-for-byte (SHA256 comparison). Integrate on that commit; preserve its complete selected-preset save fix. Earlier source mismatch is resolved.
+Verification: Pending.
+
 ## Save selected preset snapshot — 2026-10-18
 
 Active change: preset-save-snapshot-20261018

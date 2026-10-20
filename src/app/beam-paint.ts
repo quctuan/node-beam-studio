@@ -1,5 +1,5 @@
 import type { BeamSettings } from "./beam-types";
-import { referenceField, referenceOrbitSeconds, referenceTransportSeconds, referenceWindow } from "./beam-reference";
+import { referenceOrbitSeconds, referenceTransportSeconds, referenceWindow } from "./beam-reference";
 
 export type BeamRect = Readonly<{ x: number; y: number; width: number; height: number }>;
 export type BeamPoint = Readonly<{ x: number; y: number; t: number }>;
@@ -83,10 +83,6 @@ export function getBeamColor(settings: BeamSettings, point: BeamPoint): Rgba {
       : type === "diamond" ? Math.min(1, (Math.abs(rx) + Math.abs(ry)) / 2)
         : fract(point.t - angle / TAU);
   const stops = settings.gradient.stops.map((stop) => ({ position: parseFloat(stop.position) / 100, color: readRgba(stop.color, stop.opacity ?? 100) })).sort((a, b) => a.position - b.position);
-  if (type === "angular" && settings.palette !== "custom") {
-    const index = position * stops.length;
-    return mix(stops[Math.floor(index) % stops.length].color, stops[(Math.floor(index) + 1) % stops.length].color, fract(index));
-  }
   if (position <= stops[0].position) return stops[0].color;
   for (let index = 1; index < stops.length; index++) {
     if (position <= stops[index].position) {
@@ -107,8 +103,7 @@ export function getBeamOpticalSample(settings: BeamSettings, point: BeamPoint, p
     return { color: getBeamColor(settings, point), exposure: getBeamTrailExposure(point.t, phase, getBeamTrailAnchors(settings).left) };
   }
   const angle = fract(Math.atan2(point.y, point.x) / TAU + .25);
-  const color = settings.palette === "custom" ? getBeamColor(settings, point)
-    : referenceField(settings, point.x, point.y, node.width, node.height, angle, phase, hue);
+  const color = getBeamColor(settings, point);
   return { color, exposure: getBeamExposure(angle, phase, settings) };
 }
 

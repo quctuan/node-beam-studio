@@ -1,7 +1,7 @@
 import type { ToolcraftControlSectionSchema } from "@/toolcraft/runtime";
 import type { ToolcraftControlSectionInventoryEntry } from "./acceptance/types";
 
-import { beamDefaults, beamTargets } from "./beam-types";
+import { beamDefaults, beamTargets, beamPaletteGradients, beamPaletteGradientTargets } from "./beam-types";
 import { beamHandoffSection } from "./beam-handoff-schema";
 import { beamHandoffTarget, beamHandoffActionsTarget } from "./beam-handoff";
 import { sharedDefaultSection, sharedDefaultTarget, sharedDefaultActionsTarget, presetNameTarget } from "./beam-shared-default-schema";
@@ -36,7 +36,7 @@ export const appControlSectionInventory = [
       productMode: {
         request: beamModeRequestEvidence,
         sharedTargets: [beamTargets.aspect, beamTargets.shape, beamTargets.width, beamTargets.radius,
-          beamTargets.motion, beamTargets.speed, beamTargets.easing, beamTargets.palette, beamTargets.gradient,
+          beamTargets.motion, beamTargets.speed, beamTargets.easing, beamTargets.palette, beamTargets.gradient, beamTargets.fioraGradient, beamTargets.spectrumGradient, beamTargets.cyanGradient,
           beamTargets.spread, beamTargets.intensity, beamTargets.blur, beamTargets.borderWidth, beamTargets.style, beamHandoffTarget, beamHandoffActionsTarget, sharedDefaultTarget, sharedDefaultActionsTarget, presetNameTarget],
       },
     }],
@@ -61,9 +61,9 @@ export const appControlSectionInventory = [
   },
   {
     id: "beam-spectrum", title: "Beam Spectrum", entityId: "beam-spectrum", entity: "Beam spectrum",
-    targets: [beamTargets.palette, beamTargets.gradient],
-    groupingReason: "Presets and the atomic built-in gradient editor author one palette shared by border and inward light. Custom preserves all gradient stops and opacity.",
-    finiteSelectors: [{ target: beamTargets.palette, role: "branch", affectedTargets: [], reason: "Custom exposes the complete gradient editor; preset palettes preserve the hidden custom gradient." }],
+    targets: [beamTargets.palette, beamTargets.gradient, beamTargets.fioraGradient, beamTargets.spectrumGradient, beamTargets.cyanGradient],
+    groupingReason: "Each named palette owns independent gradient stops, type, angle and opacity. Exactly one native gradient editor is visible; switching retains every palette.",
+    finiteSelectors: [{ target: beamTargets.palette, role: "branch", affectedTargets: [], reason: "Selects the active native gradient editor while preserving the independent hidden palette values." }],
   },
   {
     id: "beam-light", title: "Light & Border", entityId: "beam-light", entity: "Beam light and border",
@@ -160,13 +160,19 @@ export const beamControlSections = [
       palette: {
         type: "select", target: beamTargets.palette, label: "Palette", defaultValue: beamDefaults.palette,
         options: [{ value: "fiora", label: "Fiora" }, { value: "spectrum", label: "Spectrum" }, { value: "cyan", label: "Cyan" }, { value: "custom", label: "Custom" }],
+        description: "Every palette has its own editable gradient. Switching palettes preserves each set of stops.",
         applicability: always, orderRole: "mode", ...responsive,
       },
-      gradient: {
-        type: "gradient", target: beamTargets.gradient, label: "Gradient", defaultValue: beamDefaults.gradient,
-        description: "Edit the four initial colors, stop positions and opacity. The same gradient drives the sharp border and its inward light.",
-        applicability: { mode: "conditional", all: [{ target: beamTargets.palette, equals: "custom" }] }, orderRole: "color", ...responsive,
-      },
+      ...Object.fromEntries((["fiora", "spectrum", "cyan", "custom"] as const).map((palette) => [
+        palette === "custom" ? "gradient" : `${palette}Gradient`,
+        {
+          type: "gradient" as const, target: beamPaletteGradientTargets[palette], label: "Gradient",
+          defaultValue: beamPaletteGradients[palette],
+          description: "Edit colors, positions, opacity, type and angle for this palette. Border and inward light use the same gradient.",
+          applicability: { mode: "conditional" as const, all: [{ target: beamTargets.palette, equals: palette }] },
+          orderRole: "color" as const, ...responsive,
+        },
+      ])),
     },
   },
   {

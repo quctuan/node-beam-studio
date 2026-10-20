@@ -19,7 +19,7 @@ Terminal sẽ hiện URL của port còn trống. Preview hiện tại: http://1
 - **Settings:** Background bật/tắt nền màu của preview; Workspace chọn Blanc/Dots cho vùng làm việc. Infinity bỏ giới hạn artboard. Canvas ratio/width/height là kích thước artboard, riêng với kích thước node.
 - **Node Frame:** Rounded, Rectangle hoặc Circle; tỉ lệ 1:1, 16:9, 3:4; width và corner radius. Circle giữ width/diameter và ẩn tỉ lệ/radius.
 - **Motion:** Orbit dùng cửa sổ conic quay quanh tâm như demo đã duyệt; **Trail** xuất phát chung tại giữa cạnh trái: một vệt đi theo nhánh trên, một vệt theo nhánh dưới; cả hai hội tụ và dừng ở giữa cạnh phải, mờ dần rồi biến mất trước khi lặp lại. Đầu/đuôi và glow dùng chung phase/opacity; hai nhánh đi theo chiều dài thực của viền. Breathe đổi nhịp sáng toàn viền, Static giữ frame cố định. Speed 1 ở duration mặc định 47.04s = 1.96s/chu kỳ; các bước 0.25 đóng vòng chính xác. Rhythm chọn Linear/Ease; Trail dùng cùng phase cho viền và glow vào trong. Palette/Custom gradient, Spread, Softness, Border width và Effect style vẫn dùng được. Trail lưu qua Saved Presets và Settings JSON; Developer Handoff xuất khoảng cách, độ dài vệt, px/s và chính renderer đang preview. Đổi duration retime số vòng hoàn chỉnh, nên muốn giữ tốc độ gốc hãy dùng duration mặc định.
-- **Beam Spectrum:** Fiora, Spectrum, Cyan hoặc Custom. Custom mở gradient editor để chỉnh loại gradient, angle, màu, vị trí và opacity từng stop.
+- **Beam Spectrum:** Fiora, Spectrum, Cyan hoặc Custom. Mỗi palette đều có gradient editor để chỉnh loại gradient, angle, màu, vị trí và opacity từng stop. Mỗi bộ màu được lưu riêng khi đổi qua lại. Fiora bắt đầu từ Custom đã chốt: Linear 0°, #EC379A tại 0% và #F58FC5 tại 100%, cả hai opacity 100%.
 - **Light & Border:** Soft/Neon/Crisp; Border width; Inward spread (độ sâu ánh sáng); Glow strength (độ sáng); Softness (độ mềm chuyển màu).
 - **Timeline:** Play/Pause; bật Timeline trong Settings để scrub hoặc đổi duration. Tôn trọng thiết lập giảm chuyển động của hệ thống.
 
@@ -31,7 +31,7 @@ Workspace tự lưu ở trình duyệt. **Import Settings / Export Settings** c�
 
 **Save State as Default** ghi cấu hình mặc định cho dự án local, nên dùng khi đã chốt thông số. Bản deploy chỉ có import/export JSON và tự lưu workspace trong trình duyệt.
 
-**Developer Handoff** hiển thị rotation period, hue period, chiều quay, rhythm, độ dày border và reach thực của glow. Đồ thị biểu diễn thời gian → góc của một vòng; `All parameters & formulas` mở thông số đầy đủ. `Copy HTML` tạo preview chạy độc lập: dán nội dung vào `node-beam.html`, mở bằng trình duyệt; thêm `?t=1.2` để dừng đúng frame. `Copy spec` sao chép JSON dành cho dev. Cả hai dùng chính painter của editor, không cần dev đoán CSS.
+**Developer Handoff** hiển thị chu kỳ, đường đi, rhythm, độ dày border và reach thực của glow. Tất cả palette dùng gradient đã chỉnh, không tự xoay hue của màu stop. Đồ thị biểu diễn thời gian → góc của một vòng; `All parameters & formulas` mở thông số đầy đủ. `Copy HTML` tạo preview chạy độc lập: dán nội dung vào `node-beam.html`, mở bằng trình duyệt; thêm `?t=1.2` để dừng đúng frame. `Copy spec` sao chép JSON dành cho dev. Cả hai dùng chính painter của editor, không cần dev đoán CSS.
 
 **JSON export mới** vẫn tương thích Import Settings v3, bổ sung `values["beam.developerHandoff"]` gồm settings đã resolve, hình học thực, timing/equations, các mẫu chuyển động `motion.keyframes`, falloff/gain của glow và `implementation.javascript`. Các keyframe là mẫu tham chiếu của animation tính bằng công thức; renderer được cung cấp mới là nguồn chính xác. Dev có thể lưu `implementation.javascript` thành `node-beam-runtime.js`, lưu `implementation.exampleHtml` thành `index.html` cùng thư mục, rồi mở preview. Thời điểm đã chốt nằm ở `timeline.currentTimeSeconds` của file preset; gọi `NodeBeam.renderFrame` theo hướng dẫn trong `integration.selectedFrame` để khôi phục. Import preset cũ không có handoff vẫn được; tool tính lại handoff từ controls, không chạy code được import.
 
@@ -39,7 +39,7 @@ Nếu thay painter/motion/adapter, chạy `node scripts/build-beam-handoff-runti
 
 Để tích hợp hiệu ứng trong app: `beam-types.ts` nhận map `values` của settings JSON; `beam-paint.ts` cung cấp painter Canvas2D và tính phase/bounds độc lập với editor. Studio sử dụng painter này cho preview. React binding/worker nằm trong `beam-renderer.tsx` và `beam-worker.ts`. Đồng bộ loading state của app với vòng đời hiệu ứng; dừng khi generate hoàn tất hoặc bị hủy.
 
-`beam-reference.ts` khôi phục cửa sổ sáng và 9 vùng màu cố định từ `node-border-beam/synchronized-beam.ts`. Palette **Spectrum** giữ các màu gốc; Fiora/Cyan thay màu ở cùng vị trí. Viền và glow dùng chung góc, cửa sổ và hue. Chu kỳ hue gốc 12s được fit thành 11.76s để nối kín transport 47.04s; chuyển động góc 1.96s vẫn giữ nguyên. Phần glow được dựng bằng Canvas2D nên không tuyên bố giống từng pixel với CSS của demo cũ.
+`beam-reference.ts` giữ cửa sổ chuyển động từ demo đã duyệt; chu kỳ góc 1.96s không thay đổi. Tất cả palette dùng cùng painter gradient theo type, angle, vị trí và opacity đã chọn; border và glow đọc cùng một mẫu màu và phase. Spectrum/Cyan giữ các màu khởi tạo của từng bộ, sau đó được chỉnh độc lập. Những target mới là `beam.fioraGradient`, `beam.spectrumGradient`, `beam.cyanGradient`; `beam.gradient` tiếp tục lưu Custom để các JSON cũ nạp được.
 
 ## Kiểm tra
 

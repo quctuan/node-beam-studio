@@ -4,7 +4,8 @@ import { appSchema } from "../src/app/app-schema";
 import { appAcceptance, appControlSectionInventory, getToolcraftControlApplicabilityCases, getToolcraftApplicabilityRequirementId } from "../src/app/app-acceptance";
 import { expectToolcraftProductObservableToChange } from "./product-observable-helpers";
 import { expectToolcraftControlApplicabilityState } from "./browser-control-applicability-evidence";
-import { getToolcraftControlFieldByTarget } from "./browser-control-target-helpers";
+import { getToolcraftControlOwnerByTarget, getToolcraftControlFieldByTarget } from "./browser-control-target-helpers";
+import { beamPaletteGradientTargets } from "../src/app/beam-types";
 import { proveBeamGradient } from "./beam-gradient-helpers";
 import { beamSelector, viewportSelector, openBeamProof, selectBeamValue, dragBeamSlider, editBeamColor, findBeamControl } from "./beam-ui-helpers";
 import { expect, test } from "./toolcraft-product-test";
@@ -12,8 +13,17 @@ import { expectToolcraftSegmentedControlCellsPreservePadding } from "./performan
 
 const productRows = appAcceptance.filter(row => row.target?.startsWith("beam.") && row.id !== "beam.background-output");
 async function activateControl(page: Page, target: string) {
+  if (target === "beam.palette") {
+    // Fiora intentionally starts with the same pink setup as Custom. Give
+    // Custom a real authored edit so switching palettes has distinct pixels.
+    await selectBeamValue(page, "beam.palette", "custom");
+    const custom = page.locator('[data-toolcraft-control-target="beam.gradient"]');
+    const color = custom.getByRole("textbox", { name: "Stop 1 hex", exact: true });
+    await color.fill("#FF9900"); await color.press("Enter");
+  }
   if (target === "beam.background") await selectBeamValue(page, "export.includeBackground", true);
-  if (target === "beam.gradient") await selectBeamValue(page, "beam.palette", "custom");
+  const palette = Object.entries(beamPaletteGradientTargets).find(([, value]) => value === target)?.[0];
+  if (palette) await selectBeamValue(page, "beam.palette", palette);
   if (target === "beam.radius" || target === "beam.aspect") await selectBeamValue(page, "beam.shape", "rounded");
   if (target === "beam.speed" || target === "beam.easing") await selectBeamValue(page, "beam.motion", "orbit");
 }
@@ -39,7 +49,7 @@ for (const row of productRows) {
     const session = await openBeamProof(page);
     await activateControl(page, target);
     const selector = target === "beam.background" ? viewportSelector : beamSelector;
-    if (target === "beam.gradient") {
+    if (findBeamControl(target)?.type === "gradient") {
       await proveBeamGradient(page, session, row.id, selector);
     } else {
       const schema = findBeamControl(target)!;
@@ -62,7 +72,7 @@ for (const row of productRows) {
       }), applicabilityCase, { baseRequirementId: row.id });
       if (applicabilityCase.expectation === "visible") {
         const requirementId = getToolcraftApplicabilityRequirementId(row.id, applicabilityCase);
-        if (target === "beam.gradient") await proveBeamGradient(page, session, requirementId, selector);
+        if (findBeamControl(target)?.type === "gradient") await proveBeamGradient(page, session, requirementId, selector);
         else await expectToolcraftProductObservableToChange(session, session.controlAction(target, async () => { await changeControl(page, target, index % 2 === 0); }), { selector, requirementId });
         if (findBeamControl(target)?.type === "segmented") await expectToolcraftSegmentedControlCellsPreservePadding(page, String(findBeamControl(target)?.label), { target, requirementId });
       }

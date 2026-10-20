@@ -1,6 +1,6 @@
 import { beamRuntimeSource as runtimeSource } from "./beam-runtime-source";
 import { beamTrailProfile, getBeamTrailAnchors, getBeamTrailFrame, getBeamNodeRect, getBeamPhase } from "./beam-paint";
-import { beamReferenceModel, referenceHue, referenceOrbitSeconds, referenceTransportSeconds } from "./beam-reference";
+import { beamReferenceModel, referenceOrbitSeconds, referenceTransportSeconds } from "./beam-reference";
 import { resolveBeamSettings, type BeamSettings } from "./beam-types";
 
 export const beamHandoffTarget = "beam.developerHandoff";
@@ -14,9 +14,7 @@ export function createBeamHandoff(values: Readonly<Record<string, unknown>>, dur
   const moving = settings.motion !== "static";
   const turns = Math.max(1, Math.round(duration / referenceOrbitSeconds * settings.speed));
   const period = duration / turns;
-  const hueCycles = Math.max(1, Math.round(duration / 12));
   const trail = settings.motion === "trail";
-  const hueActive = moving && !trail && settings.palette !== "custom";
   const anchors = getBeamTrailAnchors(settings);
   const perimeter = anchors.perimeter;
   const phaseTime = (phase: number) => {
@@ -29,7 +27,6 @@ export function createBeamHandoff(values: Readonly<Record<string, unknown>>, dur
     return (low + high) / 2 * period;
   };
   const travelSeconds = phaseTime(beamTrailProfile.travelEnd) - phaseTime(beamTrailProfile.travelStart);
-  const huePeriod = duration / hueCycles;
   const glowActive = settings.spread > 0 && settings.intensity > 0;
   const dark = settings.theme === "dark";
   return {
@@ -55,9 +52,9 @@ export function createBeamHandoff(values: Readonly<Record<string, unknown>>, dur
       averageLapsPerSecond: trail ? 0 : moving ? 1 / period : 0, cyclesPerSecond: moving ? 1 / period : 0,
       phaseEquation: moving ? "cycle = fract((timeSeconds / transportDurationSeconds) * turnsPerTransport); phase = rhythm(cycle)" : "phase = 0.18; hue = 0",
       rhythm: { kind: settings.easing, equation: settings.easing === "ease" ? "phase = cycle - 0.105 * sin(2 * PI * cycle)" : "phase = cycle", instantaneousSpeedRange: settings.easing === "ease" ? [1 - 2 * Math.PI * 0.105, 1 + 2 * Math.PI * 0.105] : [1, 1] },
-      exposure: trail ? "Two fronts split at the left midpoint, converge at the right midpoint, stop and fade to zero; border and inward glow share lifetime" : settings.motion === "breathing" ? "0.38 + 0.62 * (0.5 - 0.5 * cos(2 * PI * phase)); color carrier shares rotating phase" : "piecewise-linear window(fract(pointAngle - phase)); border and inward light share phase",
+      exposure: trail ? "Two fronts split at the left midpoint, converge at the right midpoint, stop and fade to zero; border and inward glow share lifetime" : settings.motion === "breathing" ? "0.38 + 0.62 * (0.5 - 0.5 * cos(2 * PI * phase)); authored gradient shares the same opacity pulse" : "piecewise-linear window(fract(pointAngle - phase)); border and inward light share phase",
       windowStops: trail ? [] : beamReferenceModel.windowStops,
-      hue: { active: hueActive, periodSeconds: hueActive ? huePeriod : null, rangeDegrees: hueActive ? [-30, 30, -30] : [0], easing: "cubic-bezier(0.42, 0, 0.58, 1) on each half-cycle", equation: "referenceHue(timeSeconds / transportDurationSeconds, transportDurationSeconds)", note: trail ? "Trail uses the authored gradient on the perimeter, without hue rotation." : settings.palette === "custom" ? "Custom gradient does not use hue rotation." : "Independent hue clock; Speed changes phase only." },
+      hue: { active: false, periodSeconds: null, rangeDegrees: [0], easing: "none", equation: "hue = 0", note: "All palettes use their authored gradient without hue rotation; picked stop colors remain exact." },
       keyframes: {
         kind: trail ? "sampled-procedural-split" : "sampled-procedural-reference", interpolation: "Reference samples only. Use implementation.javascript for exact equations and optical composition.",
         perimeter: trail ? samples(fraction => {
@@ -70,13 +67,13 @@ export function createBeamHandoff(values: Readonly<Record<string, unknown>>, dur
           const phase = getBeamPhase(fraction / turns, settings, duration);
           return { timeSeconds: fraction * period, phase, unwrappedAngleDegrees: (fraction === 1 ? 1 : phase) * 360 };
         }) : [{ timeSeconds: 0, phase: 0.18, unwrappedAngleDegrees: 64.8 }],
-        hue: hueActive ? samples(fraction => ({ timeSeconds: fraction * huePeriod, hueDegrees: referenceHue(fraction / hueCycles, duration) })) : [{ timeSeconds: 0, hueDegrees: 0 }],
+        hue: [{ timeSeconds: 0, hueDegrees: 0 }],
       },
     },
     optics: {
       inwardGlow: { enabled: glowActive, spreadPx: settings.spread, softnessPx: settings.blur, effectiveReachPx: glowActive ? Math.max(4, settings.spread + settings.blur * 1.6) : 0, authoredIntensityPercent: settings.intensity, intensityMultiplier: settings.intensity / 55, styleGain: settings.style === "neon" ? 1.5 : settings.style === "crisp" ? 0.48 : 1, themeGain: dark ? 0.30 : 0.22, direction: "inward only; clipped to node silhouette", radialFalloff: [[0, 1], [0.16, 0.81], [0.42, 0.40], [0.72, 0.085], [1, 0]], note: "Kernel reach = Spread + 1.6 × Softness. Intensity is a gain, not a single CSS opacity. Perimeter contributions are density-normalized by the supplied painter." },
       border: { widthPx: settings.borderWidth, themeAlphaGain: trail ? dark ? 1 : 0.96 : dark ? 0.46 : 0.90, baseTrackAlpha: 0, styleGain: settings.style === "neon" ? 1.4 : settings.style === "crisp" ? 1.1 : 1, note: trail ? "Alpha = gradient stop alpha * shared fading split-path exposure * themeAlphaGain * styleGain, clamped to 0…1. No colored track survives the fade." : "Final alpha also depends on field alpha and shared angular exposure; clamped to 0…1." },
-      colorField: { kind: trail || settings.palette === "custom" ? "authored-gradient" : "nine-radial-spots-and-angular-carrier", gradient: settings.gradient, spots: trail || settings.palette === "custom" ? [] : beamReferenceModel.spots.map(([radiusX, radiusY, centerX, centerY, original, paletteIndex]) => ({ radiusXpx: radiusX, radiusYpx: radiusY, centerXfraction: centerX, centerYfraction: centerY, color: settings.palette === "spectrum" ? original : settings.colors[paletteIndex % settings.colors.length] })), carrierStops: trail || settings.palette === "custom" ? [] : dark ? beamReferenceModel.darkCarrierStops : beamReferenceModel.carrierStops, filterApplied: !trail && settings.palette !== "custom", saturation: trail || settings.palette === "custom" ? 1 : dark ? 1.2 : 1.5, brightness: trail || settings.palette === "custom" ? 1 : dark ? 1.3 : 1 },
+      colorField: { kind: "authored-gradient", gradient: settings.gradient, spots: [], carrierStops: [], filterApplied: false, saturation: 1, brightness: 1 },
     },
     integration: {
       settingsJsonPath: `values["${beamHandoffTarget}"]`,

@@ -11,6 +11,9 @@ export const beamTargets = {
   easing: "beam.easing",
   palette: "beam.palette",
   gradient: "beam.gradient",
+  fioraGradient: "beam.fioraGradient",
+  spectrumGradient: "beam.spectrumGradient",
+  cyanGradient: "beam.cyanGradient",
   spread: "beam.spread",
   intensity: "beam.intensity",
   blur: "beam.blur",
@@ -51,19 +54,32 @@ export type BeamSettings = Readonly<{
 
 export const beamPaletteColors: Readonly<Record<Exclude<BeamPalette, "custom">, readonly string[]>> = {
   spectrum: ["#FF5D8F", "#F5B64C", "#31CBE0", "#9259F7"],
-  fiora: ["#ED3696", "#AF52E8", "#5984F3", "#28C4E7"],
+  fiora: ["#EC379A", "#F58FC5"],
   cyan: ["#19C6E8", "#507CF6", "#B175F3", "#30DBC4"],
 };
 
+/** Fiora adopts the Custom setup saved in the shared Loading node preset. */
 export const beamDefaultGradient: ToolcraftGradientValue = {
   angle: 0,
-  gradientType: "angular",
+  gradientType: "linear",
   stops: beamPaletteColors.fiora.map((color, index) => ({
-    color,
-    opacity: 100,
-    position: `${Math.round(index * 100 / 3)}%`,
+    color, opacity: 100, position: `${index * 100}%`,
   })),
 };
+const angularGradient = (colors: readonly string[]): ToolcraftGradientValue => ({
+  angle: 0, gradientType: "angular",
+  stops: colors.map((color, index) => ({ color, opacity: 100, position: `${Math.round(index * 100 / (colors.length - 1))}%` })),
+});
+export const beamPaletteGradients: Readonly<Record<BeamPalette, ToolcraftGradientValue>> = {
+  fiora: beamDefaultGradient,
+  spectrum: angularGradient(beamPaletteColors.spectrum),
+  cyan: angularGradient(beamPaletteColors.cyan),
+  custom: beamDefaultGradient,
+};
+export const beamPaletteGradientTargets = {
+  fiora: beamTargets.fioraGradient, spectrum: beamTargets.spectrumGradient,
+  cyan: beamTargets.cyanGradient, custom: beamTargets.gradient,
+} as const;
 
 export const beamDefaults = {
   theme: "light" as const,
@@ -76,6 +92,9 @@ export const beamDefaults = {
   easing: "linear" as const,
   palette: "fiora" as const,
   gradient: beamDefaultGradient,
+  fioraGradient: beamPaletteGradients.fiora,
+  spectrumGradient: beamPaletteGradients.spectrum,
+  cyanGradient: beamPaletteGradients.cyan,
   spread: 28,
   intensity: 55,
   blur: 12,
@@ -105,16 +124,8 @@ const isGradient = (value: unknown): value is ToolcraftGradientValue => {
 /** Read canonical runtime values; callback payloads stay owned by Toolcraft. */
 export function resolveBeamSettings(values: Readonly<Record<string, unknown>>): BeamSettings {
   const palette = choices(values[beamTargets.palette], ["spectrum", "fiora", "cyan", "custom"], beamDefaults.palette);
-  const customGradient = values[beamTargets.gradient];
-  const gradient = palette === "custom"
-    ? isGradient(customGradient) ? customGradient : beamDefaultGradient
-    : {
-      angle: 0,
-      gradientType: "angular" as const,
-      stops: beamPaletteColors[palette].map((color, index) => ({
-        color, opacity: 100, position: `${Math.round(index * 100 / 3)}%`,
-      })),
-    };
+  const authoredGradient = values[beamPaletteGradientTargets[palette]];
+  const gradient = isGradient(authoredGradient) ? authoredGradient : beamPaletteGradients[palette];
   const background = values[beamTargets.background];
   const includeBackground = values[beamTargets.includeBackground];
   return {
