@@ -41,3 +41,8 @@ Thumbs.db
 !.vscode/extensions.json
 !.vscode/settings.json
 .env*
+
+# Unified website generated output
+site/motion-source/
+motion/SOURCE-MANIFEST.json
+site/.releases/

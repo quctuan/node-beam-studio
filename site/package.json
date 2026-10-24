@@ -1,0 +1,9 @@
+{
+  "name": "node-motion-hub",
+  "version": "2.1.2",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs"
+  }
+}

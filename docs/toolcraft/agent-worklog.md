@@ -240,3 +240,11 @@ Results: The immutable initial receipt retains its historical 752 unit/contract 
 - Hosting resolved: The live deployment is retained in the user's renamed node-animation Vercel project and its stable alias was reopened and verified. The official CLI is now signed in and linked to that existing project.
 - Risk: The cover has been reproduced through actual native PNG export and inspected at 2048 × 1152. The initial protected delivery receipt has passed and is retained unchanged.
 - Risk: Native editor theme and the exported node's Light/Dark appearance are independent settings.
+
+## Complete website source publication · 2026-10-24
+
+Active change: publish-unified-node-motion-source
+Request: Push all code of the current website to quctuan/node-beam-studio.
+Owner: site/ and motion/ packaging; existing beam source retained from latest remote main. Later focused packaging checks only; no renderer/schema changes.
+Decision: Add portable integration build and local preview, pin exact deployed beam frontend/API, include editable motion source and9 Markdown notes. Exclude credentials, dependencies, generated outputs and diagnostics. Vercel build uses build:site so Git-connected deployments preserve the shared site.
+Verification: Dependency-free site build from a clean source tree, local two-tab/automaticFit/MD browser check, source archive checks and staged-file secret-pattern review.

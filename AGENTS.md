@@ -249,3 +249,7 @@ Framework capability changes follow `docs/toolcraft/module-authoring.md`: implem
 Development attachments, diagnostics and cleanup follow `docs/toolcraft/core/development-files.md`. Put agent diagnostics in `.toolcraft/browser-artifacts/` and temporary inputs in `.toolcraft/scratch/`; use `files:check` after adding working files and `files:clean` for an explicit cleanup preview. Never treat all `.toolcraft` contents as disposable.
 
 Text-only change and run history follows `docs/toolcraft/workflow.md#text-journal`. Use `journal` for change IDs and command history; `test:feature` records attempts automatically. Bind runs with `TOOLCRAFT_CHANGE_ID` and retries with `TOOLCRAFT_RETRY_OF`. Journal text never grants performance authority.
+
+## User-authorized shared website source (2026-10-24)
+
+The user requested the entire nodeanimation.vercel.app source in this repo. site/ owns the integrated website assembly; motion/ contains the editable motion prototype. Preserve the existing beam source and remote changes. Vercel must build via npm run build:site to retain both tabs and the original preset API. Read site/AGENTS.md for website changes; keep source docs and downloadable ZIP buildable.

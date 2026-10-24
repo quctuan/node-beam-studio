@@ -1,0 +1,695 @@
+{
+  "version": "1.4.1",
+  "date": "2026-10-23",
+  "title": "Fiora · Six motion annotations",
+  "figma": "https://www.figma.com/design/WAU03VCjRzoii657s3A0b5/Fiora?node-id=1103-30034",
+  "evidence": "Read-only inspection of loaded public CSS/JS assets on the authenticated Magnific web app. No paid generation or workflow mutation was run. CSS timing and source constants are verified; complete frame-by-frame visual equivalence to an active Magnific generation is not claimed.",
+  "geometry": {
+    "referenceFrame": [
+      1440,
+      1162
+    ],
+    "textNode": {
+      "x": 116,
+      "y": 140,
+      "width": 380,
+      "height": 380,
+      "radius": 16
+    },
+    "imageNode": {
+      "x": 116,
+      "y": 652,
+      "width": 380,
+      "height": 380,
+      "radius": 16
+    },
+    "generator": {
+      "x": 880,
+      "y": 256,
+      "width": 380,
+      "height": 380,
+      "radius": 16
+    },
+    "sourcePorts": {
+      "text": [
+        523,
+        148
+      ],
+      "image": [
+        523,
+        660
+      ]
+    },
+    "targetPorts": {
+      "text": [
+        854,
+        570
+      ],
+      "image": [
+        854,
+        610
+      ]
+    },
+    "wireColor": "#198aff",
+    "wireColorMapping": "Magnific data-type colors are text #8566dc, image #6f8bf7; supplied Fiora design uses #198aff for both.",
+    "font": "Inter",
+    "units": "Scene CSS pixels at100% zoom. Legacy1440×1162 frame defines initial node coordinates only; the live viewport/canvas has no artboard boundary.",
+    "referenceAssets": "Only discrete photo and font are used. UI is semantic HTML/SVG, not screenshot backgrounds."
+  },
+  "animations": [
+    {
+      "id": "M01",
+      "name": "Connection draw + Disconnect",
+      "trigger": "Demo Connect or edge Disconnect; pointerdown on output starts live temporary cable",
+      "duration": "600 ms",
+      "easing": "cubic-bezier(.4,0,.2,1)",
+      "summary": "Vẽ đường từ source đến target; ngắt thì chạy ngược.",
+      "parameters": "Demo draw 600ms, offset L → 0; disconnect 600ms, offset 0 → L. Drag preview #1188FF / .45, width2, dash5 gap5, offset0 → -20 over500ms linear infinite. Manual commit switches immediately to a solid wire; it does not replay demo draw. Solid stroke3px #198AFF; length measured with getTotalLength().",
+      "evidence": "Magnific source verified",
+      "source": "https://cdn.magnific.com/ait/assets/DeletableEdgeInteractive.BjdSjLm3.v2.css",
+      "previewTime": 0.3,
+      "status": "verified",
+      "keyframes": {
+        "draw": [
+          {
+            "offset": 0,
+            "strokeDashoffset": "L"
+          },
+          {
+            "offset": 1,
+            "strokeDashoffset": 0
+          }
+        ],
+        "disconnect": [
+          {
+            "offset": 0,
+            "strokeDashoffset": 0
+          },
+          {
+            "offset": 1,
+            "strokeDashoffset": "L"
+          }
+        ]
+      },
+      "strokeWidthPx": 3,
+      "endpointRule": "Use live port-center coordinates after drag, resize or zoom. path.getTotalLength() is authoritative; Magnific internally estimates 1.3 × endpoint distance.",
+      "dragPreview": {
+        "stroke": "#1188FF",
+        "opacity": 0.45,
+        "strokeWidthPx": 2,
+        "dashArrayPx": [
+          5,
+          5
+        ],
+        "dashOffsetPx": [
+          0,
+          -20
+        ],
+        "durationMs": 500,
+        "easing": "linear",
+        "repeat": "infinite while pointer is down, even when demo timeline is paused",
+        "stop": "pointerup, Escape or cancel; remove temporary path; valid committed cable is solid",
+        "reducedMotion": "static dashed line",
+        "provenance": "Dashed moving temporary cable follows the supplied Magnific screenshot. Exact drag dash metrics are Fiora mapping; native drag timing was not measured."
+      },
+      "implementation": "implemented; draw timeline and manual drag use different clocks",
+      "exit": "Release commits valid same-kind input; invalid drop / Escape / pointercancel / blur removes temporary cable and preserves prior connection.",
+      "reducedMotion": "Temporary dashes remain static. Demo draw switches immediately; graph disconnect retains its 600ms reverse draw.",
+      "code": [
+        "app.js: line(), endDrag(), .port.out pointer handlers",
+        "wire-interactions.js: draw(), disconnect(), findTarget()",
+        "style.css: #drag-wire, @keyframes drag-dash"
+      ],
+      "previewMode": "timeline",
+      "docsAnchor": "m01",
+      "version": "1.3.1",
+      "previewURL": "https://fiora-node-motion.vercel.app/?lab=1&t=0.3",
+      "order": 1,
+      "downloadMarkdown": "docs/M01.md"
+    },
+    {
+      "id": "M02",
+      "name": "Target connector + inward ring & particle",
+      "trigger": "Live cable pointer is within58 screen px of nearest compatible input",
+      "duration": "1300 ms / inward ring; continuous while target is nearby",
+      "easing": "radius quadratic ease-out; opacity sin(π·phase)",
+      "summary": "Một vòng co nhẹ vào tâm; halo mờ và ít dot hơn.",
+      "parameters": "One ring only. radius=portScreenRadius+14*(1-phase)^2; opacity=sin(pi*phase)*.28; stroke1px #1188FF. Halo radius+12 at .025. Native26-particle pool; at most8 visible dots, groupopacity .65. Snap within28 screenpx.",
+      "evidence": "Magnific particle constants · user-requested inward rings",
+      "source": "https://cdn.magnific.com/ait/assets/SpacesConnectionLine.LZqBVAXs.v2.css",
+      "previewTime": 1.42,
+      "status": "adapted",
+      "particlePhysics": {
+        "count": 26,
+        "pull": 22000,
+        "swirl": 0.35,
+        "damping": 2.5,
+        "absorbRadius": 3,
+        "minSpawnRadius": 14,
+        "maxSpawnRadius": 30,
+        "fadeInSeconds": 0.12,
+        "chargeSeconds": 1.5,
+        "maxPullBoost": 2.5,
+        "sizePx": [
+          1.5,
+          2.2
+        ],
+        "sizeLargeProbability": 0.2,
+        "initialDelayMaxSeconds": 0.6,
+        "charge": "1 - (1 - clamp(elapsed/1.5,0,1))^3",
+        "acceleration": "f=22000*(1+1.5*charge)/max(distance,4); acceleration adds radial + .35 tangential force. velocity *= exp(-2.5*dt).",
+        "opacity": "min(1,age/.12) * (.3 + .7 * (1-min(1,distance/startDistance)))",
+        "zoom": "Live feedback SVG uses viewport CSS pixels; radii, dots and proximity thresholds do not scale with canvas zoom.",
+        "integration": "Magnific clamps frame dt to .05 s; prototype uses deterministic 1/120 s steps.",
+        "spawnRadiusFormula": "min=max(14,pointerDistance*.6), max=max(30,pointerDistance*1.1); uniform radius between min/max.",
+        "respawnDelayMaxSeconds": ".15*(1-.6*charge)",
+        "initialVelocity": "Tangential20px/s, random clockwise/counterclockwise direction.",
+        "headingSpreadRadians": "(pointerDistance<6 ? pi : .63)*(1-.5*charge)",
+        "randomSeed": 7
+      },
+      "secondarySource": "https://cdn.magnific.com/ait/assets/useSpacesConnectionSpark.B9TOIKIq.v2.js",
+      "exit": "Clear overlay on target leave / release / Escape / cancel; reset particle seed on target change.",
+      "reducedMotion": "One static ring: radius+4, 1px #8FC7FF at .5; halo remains; no dots.",
+      "implementation": "implemented in live drag; old automatic timeline spark sample is separate reference playback",
+      "previewMode": "interaction",
+      "previewSteps": "Kéo output T đến gần input T (dưới58px màn hình); giữ chuột để xem 1 vòng co vào. Thả trong28px để nối.",
+      "code": [
+        "connector-feedback.js: render(), candidates, rings",
+        "app.js: particles(), worlds",
+        "wire-interactions.js: findTarget()"
+      ],
+      "configuration": {
+        "proximityScreenPx": 58,
+        "snapScreenPx": 28,
+        "inwardRings": 1,
+        "periodMs": 1300,
+        "phaseOffset": 0,
+        "radius": "port screen radius + 14*(1-phase)^2 → port radius",
+        "opacity": "sin(pi*phase)*.28",
+        "particles": "Native 26-particle pool; render at most 8 dots at .65 group opacity",
+        "reducedMotion": "Static target ring, no moving rings or particles",
+        "cleanup": "Clear on pointer leaving target, release, cancel or Escape",
+        "halo": "port radius +12px, fill opacity .025"
+      },
+      "docsAnchor": "m02",
+      "version": "1.3.1",
+      "previewURL": "https://fiora-node-motion.vercel.app/?lab=1",
+      "order": 2,
+      "downloadMarkdown": "docs/M02.md",
+      "connectorStates": {
+        "neutral": "border #E4E4E7, no wire attached",
+        "connected": "border #8FC7FF, at least one attached edge; independent of full graph reachability",
+        "selected": "border #1188FF only for connectors owned by clicked node",
+        "selection": "Capture pointerdown on original or inserted nodes; click blank canvas/wire clears node selection",
+        "targetFeedback": {
+          "proximityScreenPx": 58,
+          "snapScreenPx": 28,
+          "inwardRings": 1,
+          "periodMs": 1300,
+          "phaseOffset": 0,
+          "radius": "port screen radius + 14*(1-phase)^2 → port radius",
+          "opacity": "sin(pi*phase)*.28",
+          "particles": "Native 26-particle pool; render at most 8 dots at .65 group opacity",
+          "reducedMotion": "Static target ring, no moving rings or particles",
+          "cleanup": "Clear on pointer leaving target, release, cancel or Escape",
+          "halo": "port radius +12px, fill opacity .025"
+        },
+        "portSizePx": 28,
+        "borderWidthPx": 1.5
+      },
+      "notes": "Live target behavior is1300ms/one ring/max8dots. Automatic Connect playback uses a legacy900ms pulse; use live drag for this annotation."
+    },
+    {
+      "id": "M03",
+      "name": "Landing impact & split sweep",
+      "trigger": "Connection commits successfully",
+      "duration": "650 ms impact · 320 ms recoil",
+      "easing": "cubic-bezier(.22,1,.36,1)",
+      "summary": "Cổng sáng lên, node giật nhẹ, hai vệt chạy quanh viền.",
+      "parameters": "Ring r10: scale .6 → 2.6, opacity 1 → 0. Core r6: 1.4 → .6, .9 → 0. Flash20px/.35 +2.5px core; recoil−8px/320ms. Split sweep650ms, normalized dash .22/2, offset .22→−.78, cubic(.33,0,.2,1), fade after75%.",
+      "evidence": "Magnific source verified",
+      "source": "https://cdn.magnific.com/ait/assets/SpacesConnectionImpactLayer.CTH0S9Th.v2.css",
+      "previewTime": 0.78,
+      "status": "verified",
+      "recoil": {
+        "durationMs": 320,
+        "pushPx": -8,
+        "segments": [
+          [
+            0,
+            0
+          ],
+          [
+            0.25,
+            1
+          ],
+          [
+            0.55,
+            -0.3
+          ],
+          [
+            0.8,
+            0.1
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "segmentEasing": "ease-out",
+        "composite": "add; preserve any node drag transform"
+      },
+      "flash": {
+        "outerWidthPx": 20,
+        "outerOpacity": 0.35,
+        "coreWidthPx": 2.5,
+        "scaleY": [
+          0.05,
+          1
+        ],
+        "opacityStops": [
+          [
+            0,
+            0
+          ],
+          [
+            0.25,
+            1
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "transformOrigin": "port Y / card height"
+      },
+      "sweep": {
+        "pathLength": 1,
+        "dasharray": [
+          0.22,
+          2
+        ],
+        "dashoffset": [
+          0.22,
+          -0.78
+        ],
+        "easing": "cubic-bezier(.33,0,.2,1)",
+        "opacityHoldUntil": 0.75,
+        "glowStrokePx": 8,
+        "glowOpacity": 0.3,
+        "coreStrokePx": 2,
+        "outlineStrokePx": 1.5,
+        "outlineOpacityPeak": 0.45,
+        "outlinePeakAt": 0.35,
+        "paths": "Two rounded paths from the input Y around top/bottom to the opposite edge; radius16."
+      },
+      "secondarySource": "https://cdn.magnific.com/ait/assets/SpacesConnectionImpactLayer.Cx4vJF8K.v2.js",
+      "exit": "Remove impact after650ms; recoil returns to0 after320ms.",
+      "reducedMotion": "No impact ring/core/flash, sweep or recoil.",
+      "implementation": "implemented for original generator demo and original-output commit; inserted-node links are routing previews without per-node impact.",
+      "code": [
+        "app.js: impact(), renderImpact()",
+        "style.css: @keyframes impact-ring/impact-core/impact-flash, .receiver-sweep"
+      ],
+      "previewMode": "timeline",
+      "docsAnchor": "m03",
+      "version": "1.3.1",
+      "previewURL": "https://fiora-node-motion.vercel.app/?lab=1&t=0.78",
+      "order": 3,
+      "downloadMarkdown": "docs/M03.md"
+    },
+    {
+      "id": "M07",
+      "name": "Finishing border",
+      "trigger": "isProcessing=true && isRealProcessing=false && isPending=false",
+      "duration": "800 ms + continuing 4000 ms rotation",
+      "easing": "ease-out + linear",
+      "summary": "Dải beam nở thành toàn bộ viền trước khi lộ ảnh.",
+      "parameters": "--segment-size .278 → 1. Keep color1 .056/.278 & color2 .167/.278 relative stop ratios. Colors #1188FF / #8FC7FF. Expand800ms ease-out while rotation continues4000ms linear from225deg. Border4px; outer radius20/inner16; glowblur20/.6. Interior remains white.",
+      "evidence": "Magnific source verified",
+      "source": "https://cdn.magnific.com/ait/assets/app-shared.C_DTTWiu.v2.css",
+      "previewTime": 8.8,
+      "status": "verified",
+      "segmentSize": [
+        0.278,
+        1
+      ],
+      "gradient": "transparent0turn, color1(.056*segment/.278)turn, color2(.167*segment/.278)turn, transparent(segment)turn",
+      "exit": "Demo reveals at9.2s. Production waits for real completion and decoded image; continue rotation phase instead of restarting.",
+      "reducedMotion": "Static outline; no segment expansion or spinning glow.",
+      "implementation": "implemented",
+      "code": [
+        "style.css: .receiver.finishing, @property --segment-size, @keyframes fill-border",
+        "app.js: render() animation origins"
+      ],
+      "previewMode": "timeline",
+      "docsAnchor": "m07",
+      "version": "1.3.1",
+      "previewURL": "https://fiora-node-motion.vercel.app/?lab=1&t=8.8",
+      "order": 4,
+      "downloadMarkdown": "docs/M07.md",
+      "configuration": {
+        "colors": {
+          "color1": "#1188FF",
+          "color2": "#8FC7FF",
+          "provenance": "User-selected Fiora palette, 2026-10-23. Magnific timing and gradient geometry are preserved; source default palette was #ff00aa / #00fff1."
+        },
+        "borderSizePx": 4,
+        "outerRadiusPx": 20,
+        "contentRadiusPx": 16,
+        "gradientStops": [
+          [
+            0,
+            "transparent"
+          ],
+          [
+            20,
+            "#1188FF"
+          ],
+          [
+            60,
+            "#8FC7FF"
+          ],
+          [
+            100,
+            "transparent"
+          ],
+          [
+            360,
+            "transparent"
+          ]
+        ],
+        "angleFormula": "225 + 360*((runningElapsedMs % 4000)/4000)",
+        "spinPlaneSize": "hypot(cardWidth + 2*border, cardHeight + 2*border)",
+        "glow": {
+          "blurPx": 20,
+          "opacity": 0.6,
+          "phase": "same angle as border"
+        }
+      }
+    },
+    {
+      "id": "M08",
+      "name": "Image ready / reveal",
+      "trigger": "Image resource decoded and ready",
+      "duration": "500 ms",
+      "easing": "cubic-bezier(.4,0,.2,1)",
+      "summary": "Ảnh vào từ blur nhẹ đến rõ; không scale ảnh.",
+      "parameters": "opacity .8 → 1; blur15px → 0; brightness1.08 → 1; saturation .75 → 1.",
+      "evidence": "Magnific source verified",
+      "source": "https://cdn.magnific.com/ait/assets/app-shared.C_DTTWiu.v2.css",
+      "previewTime": 9.42,
+      "status": "verified",
+      "keyframes": [
+        {
+          "opacity": 0.8,
+          "filter": "blur(15px) brightness(1.08) saturate(.75)"
+        },
+        {
+          "opacity": 1,
+          "filter": "none"
+        }
+      ],
+      "readyGate": "await image.decode(); never reveal incomplete images. Demo output reuses the source photo; no AI generation is run.",
+      "exit": "After500ms: opacity1, filter:none. Cancel exits to input state.",
+      "reducedMotion": "Show decoded image immediately, no blur/fade.",
+      "implementation": "implemented; bundled source image reused as demo result",
+      "code": [
+        "style.css: @keyframes media-reveal, .receiver.reveal .result-content img",
+        "app.js: startup image.decode(), phase()"
+      ],
+      "previewMode": "timeline",
+      "docsAnchor": "m08",
+      "version": "1.3.1",
+      "previewURL": "https://fiora-node-motion.vercel.app/?lab=1&t=9.42",
+      "order": 5,
+      "downloadMarkdown": "docs/M08.md",
+      "configuration": {
+        "durationMs": 500,
+        "delayMs": 0,
+        "iterations": 1,
+        "easing": "cubic-bezier(.4,0,.2,1)",
+        "transform": "none; no scale",
+        "containerRadiusPx": 16,
+        "objectFit": "cover",
+        "decodeGate": true
+      }
+    },
+    {
+      "id": "M12",
+      "name": "Wire interaction — Disconnect / Insert",
+      "trigger": "Wire hover, right-click, select + Delete",
+      "duration": "Hover200ms; leave160ms / menu leave180ms; disconnect600ms",
+      "easing": "Disconnect cubic-bezier(.4,0,.2,1)",
+      "summary": "Chọn dây để Delete; hover hoặc chuột phải mở menu thao tác.",
+      "parameters": "Hover/right-click opens Disconnect / Insert node. Click selects only. Disconnect removes chosen segment, keeps nodes/branches. Insert replaces chosen edge by source→new→target, supports repeated insertion, searchable10 types. Picker is screen-space, canvas unchanged by scroll inside picker.",
+      "evidence": "Supplied Fiora Figma interaction flow",
+      "status": "adapted",
+      "previewTime": 0,
+      "exit": "Escape/outside click dismisses without graph change. Valid pick inserts then Fit. Empty search shows No nodes found.",
+      "reducedMotion": "No menu entry animation; disconnect retains600ms reverse draw.",
+      "implementation": "implemented graph/placement preview; inserted node operations have no AI backend",
+      "configuration": {
+        "figma": "https://www.figma.com/design/WAU03VCjRzoii657s3A0b5/Fiora?node-id=5546-77188",
+        "selection": "Click selects wire; does not disconnect. Delete/Backspace removes selected connection; ignored in text fields.",
+        "menu": "Hover 200ms or right-click opens Disconnect / Insert node. Escape / click outside dismisses.",
+        "disconnect": "Only selected segment removed; 600ms reverse draw. Nodes retained; missing generator inputs disable Run.",
+        "insert": "Searchable node picker with all 10 types from Figma. Choose creates draggable node and replaces selected edge with source → new node → target. Other branches retained.",
+        "pickerTypes": [
+          "Text",
+          "Image generator",
+          "Ideas assistant",
+          "Element detector",
+          "Image compositor",
+          "Variations",
+          "Crop",
+          "Upscale",
+          "Remove background",
+          "Change camera angle"
+        ],
+        "graph": "Supports repeated insertion, branch-specific removal, reachability checks, moving inserted nodes and reconnecting their output ports.",
+        "assets": "Disconnect/search and picker icons exported from original Figma main components.",
+        "limits": "Inserted nodes simulate routing and placement in the prototype; no AI backend execution.",
+        "menuAppearance": {
+          "widthPx": 240,
+          "paddingPx": 12,
+          "radiusPx": 18,
+          "rowHeightPx": 56,
+          "iconSizePx": 22,
+          "iconColor": "#62636E",
+          "fontPx": 16,
+          "iconTextGapPx": 16,
+          "shadow": "0 12px 32px #18181b14, 0 2px 6px #18181b06",
+          "icons": "Existing Fiora vector paths, duplicate disconnect path removed; menu-specific neutral plus",
+          "borderPx": 1,
+          "borderColor": "#E4E4E7",
+          "rowPaddingPx": 12,
+          "rowRadiusPx": 10,
+          "fontWeight": 400,
+          "lineHeightPx": 24,
+          "textColor": "#202025",
+          "background": "#FFFFFF",
+          "hoverBackground": "#F5F5F6"
+        },
+        "timing": {
+          "hoverOpenMs": 200,
+          "wireLeaveMs": 160,
+          "menuLeaveMs": 180,
+          "disconnectMs": 600,
+          "disconnectEasing": "cubic-bezier(.4,0,.2,1)",
+          "menuEntrance": "none; display immediately after delay",
+          "selectionStrokeTransitionMs": 600
+        },
+        "wireHitAreaScenePx": 20,
+        "selectedWire": {
+          "stroke": "#1188FF",
+          "widthPx": 3.5,
+          "shadow": "0 0 3px #1188ff55"
+        },
+        "menuPosition": "Anchor pointer viewport-relative; x=pointerX-24, y=pointerY-10; clamp min8/max(viewport-panel-8). Menu height138, maxHeight=viewportHeight-24.",
+        "pickerAppearance": {
+          "widthPx": 260,
+          "maxHeightPx": 368,
+          "radiusPx": 14,
+          "paddingPx": 4,
+          "searchHeightPx": 40,
+          "searchRadiusPx": 10,
+          "searchFontPx": 12,
+          "rowFontPx": 14,
+          "rowPaddingPx": 8,
+          "rowRadiusPx": 10,
+          "rowGapPx": 12,
+          "iconWrapperPx": 28,
+          "iconPx": 20,
+          "scroll": "internal list",
+          "search": "trimmed case-insensitive substring",
+          "emptyState": "No nodes found"
+        },
+        "insertPlacement": "New node x=sceneAnchorX+70,y=sceneAnchorY-120; body380x380. Replace chosen edge by2 edges of same kind. Resolve overlapping downstream node, then Fit."
+      },
+      "previewMode": "interaction",
+      "previewSteps": "Hover dây200ms hoặc chuột phải → Insert node → tìm Crop → chọn. Chỉ đoạn được chọn tách thành2 dây. Escape để hủy.",
+      "code": [
+        "wire-interactions.js: showMenu(), close(), disconnect(), renderList(), insert(), reachable(), route()"
+      ],
+      "docsAnchor": "m12",
+      "version": "1.3.1",
+      "previewURL": "https://fiora-node-motion.vercel.app/?lab=1",
+      "order": 6,
+      "downloadMarkdown": "docs/M12.md"
+    },
+    {
+      "status": "adapted",
+      "evidence": "Separate Fiora wire interaction requirements",
+      "implementation": "Implemented in current prototype",
+      "previewMode": "interaction",
+      "previewTime": 0,
+      "version": "1.4.1",
+      "easing": "cubic-bezier(.4,0,.2,1)",
+      "id": "M16",
+      "order": 7,
+      "name": "Connection success · dashed to solid",
+      "duration": "320ms fill ·160ms endpoint morph",
+      "trigger": "Valid release on a compatible available input",
+      "summary": "Connection success · dashed to solid",
+      "parameters": "Fade dashed preview opacity .45→0 while solid3px draws source→target over320ms. Endpoint moves release point→input over160ms. Hide committed graph edge until overlay completes.",
+      "exit": "Overlay removed after320ms, committed edge becomes visible.",
+      "reducedMotion": "Immediate commit, no moving fill.",
+      "code": [
+        "wire-motion.js: installWireMotion(), settle(), render()",
+        "wire-interactions.js: finishCable(), draw()"
+      ],
+      "configuration": {
+        "commitMs": 320,
+        "endpointMorphMs": 160,
+        "invalidRetractMs": 260,
+        "disconnectMs": 600,
+        "easing": "cubic-bezier(.4,0,.2,1)",
+        "dashFadeOpacity": [
+          0.45,
+          0
+        ],
+        "solidWidthPx": 3,
+        "previewWidthPx": 2,
+        "route": "M ax ay C ax+h ay bx-h by bx by; h=clamp(.45*hypot(dx,dy),64,240)",
+        "reducedMotion": "instant settlement",
+        "cleanup": "remove transient overlay and reveal committed graph edge at completion"
+      },
+      "docsAnchor": "m16",
+      "downloadMarkdown": "docs/M16.md",
+      "previewURL": "https://fiora-node-motion.vercel.app/?lab=1&v=1.4.1",
+      "previewSteps": "Kéo output vào thân node để thử; thả ra nền để xem thu dây."
+    },
+    {
+      "status": "adapted",
+      "evidence": "Separate Fiora wire interaction requirements",
+      "implementation": "Implemented in current prototype",
+      "previewMode": "interaction",
+      "previewTime": 0,
+      "version": "1.4.1",
+      "easing": "cubic-bezier(.4,0,.2,1)",
+      "id": "M17",
+      "order": 8,
+      "name": "Soft curved wire routing",
+      "duration": "Direct geometry update; no delay",
+      "trigger": "Drawing, moving or inserting a connected node, or dragging a cable",
+      "summary": "Soft curved wire routing",
+      "parameters": "All routes use cubic Bézier: M ax ay C ax+h ay bx-h by bx by. h=clamp(.45*hypot(dx,dy),64,240) scene px. Horizontal endpoint tangents; round linecaps/joins. No orthogonal elbows.",
+      "exit": "Recompute from live endpoint centers on node move.",
+      "reducedMotion": "Same geometry, no additional animation.",
+      "code": [
+        "wire-motion.js: wirePath()",
+        "app.js: paths, updateNodeGeometry()",
+        "wire-interactions.js: route()"
+      ],
+      "configuration": {
+        "handleMinPx": 64,
+        "handleMaxPx": 240,
+        "distanceFactor": 0.45,
+        "linecap": "round",
+        "linejoin": "round"
+      },
+      "docsAnchor": "m17",
+      "downloadMarkdown": "docs/M17.md",
+      "previewURL": "https://fiora-node-motion.vercel.app/?lab=1&v=1.4.1",
+      "previewSteps": "Di chuyển node hoặc Insert node để xem đường dây cong mềm."
+    },
+    {
+      "status": "adapted",
+      "evidence": "Separate Fiora wire interaction requirements",
+      "implementation": "Implemented in current prototype",
+      "previewMode": "interaction",
+      "previewTime": 0,
+      "version": "1.4.1",
+      "easing": "cubic-bezier(.4,0,.2,1)",
+      "id": "M18",
+      "order": 9,
+      "name": "Node-body drop · auto detect & retract",
+      "duration": "260ms invalid retract",
+      "trigger": "Release anywhere inside a target node body, or within28 screen px of its input",
+      "summary": "Node-body drop · auto detect & retract",
+      "parameters": "Whole380x380 body is a target. Choose same-kind free input, ignore existing edge from current source in occupancy check. Reject occupied input, self-link and directed cycles. Body hover activates target feedback. Invalid/cancel drop retracts source→pointer path by dashoffset0→L over260ms; retain prior graph.",
+      "exit": "Valid drop uses M16. Invalid/cancel clears preview after260ms; no graph mutation.",
+      "reducedMotion": "Invalid cable disappears immediately.",
+      "code": [
+        "wire-interactions.js: resolveTarget(), findTarget(), beginCable(), finishCable()",
+        "connector-feedback.js: resolveTarget() feedback integration",
+        "wire-motion.js: invalid settlement"
+      ],
+      "configuration": {
+        "bodySizePx": [
+          380,
+          380
+        ],
+        "portSnapScreenPx": 28,
+        "feedbackProximityScreenPx": 58,
+        "invalidRetractMs": 260,
+        "availability": "same kind, no incoming edge from other source, no self/cycle",
+        "preservePriorConnections": true
+      },
+      "docsAnchor": "m18",
+      "downloadMarkdown": "docs/M18.md",
+      "previewURL": "https://fiora-node-motion.vercel.app/?lab=1&v=1.4.1",
+      "previewSteps": "Kéo output vào thân node để thử; thả ra nền để xem thu dây."
+    }
+  ],
+  "artifacts": {
+    "preview": "index.html",
+    "runtime": "app.js + wire-interactions.js + connector-feedback.js + style.css",
+    "spec": "motion-spec.json",
+    "seek": "?lab=1&t=4.4",
+    "controls": "Six annotations only; per-effect MD and combined MD downloads. Existing interactive prototype behavior retained.",
+    "markdown": "DEVELOPER-HANDOFF.md",
+    "sourceZip": "fiora-motion-source.zip",
+    "manifest": "SOURCE-MANIFEST.json",
+    "markdownFiles": [
+      "docs/M01.md",
+      "docs/M02.md",
+      "docs/M03.md",
+      "docs/M07.md",
+      "docs/M08.md",
+      "docs/M12.md",
+      "docs/M16.md",
+      "docs/M17.md",
+      "docs/M18.md"
+    ]
+  },
+  "comparisonLimits": [
+    "Magnific source timing/physics studied read-only2026-10-23. Fiora palette/layout and current connector/menu/canvas behavior follow user requests; no claim of active-generation frame parity.",
+    "Old automatic Connect sample still has900ms target pulse and26 dots; live drag M02 is the approved1300ms one-ring/max8-dot version.",
+    "No AI backend, persistence, production error simulation, or per-inserted-node generation. Demo uses supplied photo as result.",
+    "Historical shimmer/list-wire/Safari reference variants are not current active UI. Reference-only values are explicitly separated."
+  ],
+  "schemaVersion": 2,
+  "annotationScope": [
+    "M01",
+    "M02",
+    "M03",
+    "M07",
+    "M08",
+    "M12",
+    "M16",
+    "M17",
+    "M18"
+  ]
+}

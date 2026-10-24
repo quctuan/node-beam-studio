@@ -1,0 +1,8 @@
+// M01: shared soft routing, 320ms commit fill and 260ms invalid-drop retract.
+export function wirePath(a,b){const h=Math.max(64,Math.min(240,Math.hypot(b.x-a.x,b.y-a.y)*.45));return `M ${a.x} ${a.y} C ${a.x+h} ${a.y} ${b.x-h} ${b.y} ${b.x} ${b.y}`;}
+export function installWireMotion(svg,ease){
+ const ns='http://www.w3.org/2000/svg',layer=document.createElementNS(ns,'g');layer.id='wire-settlements';layer.style.pointerEvents='none';svg.appendChild(layer);const jobs=[];const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+ function settle({from,point,to,valid,onComplete=()=>{}}){if(reduced()){onComplete();return;}const group=document.createElementNS(ns,'g');group.innerHTML='<path class="settle-dash"/><path class="settle-solid"/>';layer.appendChild(group);jobs.push({group,from,point,to:to||point,valid,onComplete,start:performance.now(),duration:valid?320:260});}
+ function render(){const now=performance.now();for(const j of [...jobs]){const t=Math.min(1,(now-j.start)/j.duration),q=ease(t),b=j.valid?{x:j.point.x+(j.to.x-j.point.x)*ease(Math.min(1,t*2)),y:j.point.y+(j.to.y-j.point.y)*ease(Math.min(1,t*2))}:j.point;const d=wirePath(j.from,b),dash=j.group.children[0],solid=j.group.children[1];dash.setAttribute('d',d);solid.setAttribute('d',d);const len=solid.getTotalLength();if(j.valid){dash.style.opacity=String(.45*(1-q));solid.style.strokeDasharray=String(len);solid.style.strokeDashoffset=String((1-q)*len);}else{dash.style.opacity='0';solid.style.strokeWidth='2';solid.style.strokeOpacity='.45';solid.style.strokeDasharray=String(len);solid.style.strokeDashoffset=String(q*len);}if(t>=1){j.group.remove();jobs.splice(jobs.indexOf(j),1);j.onComplete();}}}
+ return {settle,render,get pending(){return jobs.length;}};
+}

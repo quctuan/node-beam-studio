@@ -1,0 +1,9 @@
+{
+  "name": "fiora-node-motion",
+  "version": "1.4.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs"
+  }
+}
