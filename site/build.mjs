@@ -6,7 +6,9 @@ const root=path.dirname(fileURLToPath(import.meta.url));process.chdir(root);
 await fs.rm('dist',{recursive:true,force:true});await fs.mkdir('dist',{recursive:true});
 await fs.cp('beam-original','dist',{recursive:true});
 await fs.rename('dist/index.html','dist/beam.html');
-for(const name of ['index.html','hub.css','hub.js','brand-mark.svg'])await fs.copyFile(name,'dist/'+name);
+const beamEntry=await fs.readFile('dist/beam.html','utf8');
+await fs.writeFile('dist/beam.html',beamEntry.replace('</head>','<script type="module" src="/beam-playback-placement.js"></script></head>'));
+for(const name of ['index.html','hub.css','hub.js','brand-mark.svg','beam-playback-placement.js'])await fs.copyFile(name,'dist/'+name);
 // Assemble a same-origin motion app, including rebased Markdown and runnable source downloads.
 execFileSync('node',['build.mjs'],{cwd:path.join(root,'../motion'),stdio:'inherit'});
 const source=JSON.parse(await fs.readFile('../motion/SOURCE-MANIFEST.json','utf8'));
