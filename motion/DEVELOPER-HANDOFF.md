@@ -1,6 +1,6 @@
 # Fiora — motion annotations
 
-Version **1.4.3**. Sáu note gốc được giữ theo bản trước. Ba yêu cầu wire nằm riêng trong M16–M18. M19 là node target border/elevation, độc lập với M02.
+Version **1.4.4**. Sáu note gốc được giữ theo bản trước. Ba yêu cầu wire nằm riêng trong M16–M18. M19 là node target border/elevation, độc lập với M02.
 
 [Preview](https://fiora-node-motion.vercel.app/?lab=1) · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
 
@@ -704,7 +704,7 @@ Thời gian/physics Magnific được kiểm tra read-only từ deployed assets;
 
 # Fiora / Connection success · dashed to solid
 
-Version **1.4.3** · Yêu cầu riêng · M16 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
+Version **1.4.4** · Yêu cầu riêng · M16 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
 
 <a id="m16"></a>
 
@@ -756,7 +756,7 @@ Lấy settle()/render() trong wire-motion.js. Gọi mỗi RAF; chỉ reveal grap
 
 # Fiora / Soft curved wire routing
 
-Version **1.4.3** · Yêu cầu riêng · M17 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
+Version **1.4.4** · Yêu cầu riêng · M17 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
 
 <a id="m17"></a>
 
@@ -803,7 +803,7 @@ Dùng chung wirePath() cho dây gốc, node chèn và preview.
 
 # Fiora / Node-body drop · auto detect & retract
 
-Version **1.4.3** · Yêu cầu riêng · M18 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
+Version **1.4.4** · Yêu cầu riêng · M18 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
 
 <a id="m18"></a>
 
@@ -850,7 +850,7 @@ resolveTarget() kiểm tra body hit hoặc gần cổng, filter kind/occupancy/c
 
 # Fiora / Node target · blue border & elevation
 
-Version **1.4.3** · Yêu cầu riêng · M19 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
+Version **1.4.4** · Yêu cầu riêng · M19 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
 
 <a id="m19"></a>
 
@@ -860,7 +860,7 @@ Kéo dây vào node hợp lệ: viền xanh branding, shadow nâng khối rõ kh
 
 - **Trigger:** Live cable resolves a compatible available input by node body hit or connector proximity58 screen px
 - **Duration / easing:** Border0ms · shadow180ms; delay0ms, no repeat · Shadow ease-out (cubic-bezier(0,0,.58,1)); border immediate
-- **Thông số:** Border/outline2px #1188FF immediately; shadow 0 0 0 1px #1188FF26,0 16px 48px #182B4933,0 4px 12px #182B4924. Shadow ramps0→1 over180ms; no transform or scale.
+- **Thông số:** Border/outline2px #1188FF immediately; shadow 0 0 0 1px #1188FF14,0 16px 48px #182B491A,0 4px 12px #182B4912. Shadow ramps0→1 over180ms; no transform or scale.
 - **Exit / cleanup:** Leave/drop/Escape/pointercancel/blur clears target on next frame; underlying default/hover/selected/locked border restores immediately and shadow fades180ms.
 - **Reduced motion:** Static blue border + full elevation immediately; no transitions. M02 ring/particle reduction remains separate.
 - **Trạng thái implement:** Implemented for generator and all inserted compatible nodes. Invalid/occupied/wrong-kind/self/cycle/locked targets excluded. Separate from M02 connector feedback.
@@ -871,7 +871,7 @@ Kéo dây vào node hợp lệ: viền xanh branding, shadow nâng khối rõ kh
 ### Code / cách áp dụng
 
 ```css
-:root { --node-target-shadow:0 0 0 1px #1188FF26,0 16px 48px #182B4933,0 4px 12px #182B4924; }
+:root { --node-target-shadow:0 0 0 1px #1188FF14,0 16px 48px #182B491A,0 4px 12px #182B4912; }
 .node-group.is-drop-target .receiver {
   outline-color:#1188FF;
   box-shadow:var(--node-target-shadow);
@@ -903,7 +903,7 @@ Manual QA: disconnect both wires, deselect canvas => default. Hover => gray; poi
   "configuration": {
     "trigger": "Compatible available input resolved by node-body hit or proximity58 screen px; actual release28px",
     "border": "2px solid #1188FF; immediate (0ms)",
-    "shadow": "0 0 0 1px #1188FF26,0 16px 48px #182B4933,0 4px 12px #182B4924",
+    "shadow": "0 0 0 1px #1188FF14,0 16px 48px #182B491A,0 4px 12px #182B4912",
     "entry": "border0ms, shadow180ms ease-out",
     "exit": "Remove target class on leave/drop/cancel/blur; border restores immediately; shadow fades180ms",
     "reducedMotion": "Static highlight/shadow, no transitions, existing ring/dots reduced-motion behavior unchanged",

@@ -41,7 +41,7 @@ html,body{width:100%;height:100%;overflow:hidden}.viewport{background-color:#f7f
 #wire-settlements path{fill:none;stroke:#1188FF;stroke-width:3;stroke-linecap:round;pointer-events:none}.settle-dash{stroke-dasharray:5 5;stroke-width:2!important}.settle-solid{stroke-linecap:round}.wire .base,.graph-wire .base,#drag-wire{stroke-linecap:round;stroke-linejoin:round}
 
 /* Figma 5605:73974 node states. Motion states retain ownership of beam/reveal. */
-:root{--node-border-default:#E4E4E7;--node-border-hover:#D4D4D8;--node-border-selected:#1188FF;--node-target-shadow:0 0 0 1px #1188FF26,0 16px 48px #182B4933,0 4px 12px #182B4924}
+:root{--node-border-default:#E4E4E7;--node-border-hover:#D4D4D8;--node-border-selected:#1188FF;--node-target-shadow:0 0 0 1px #1188FF14,0 16px 48px #182B491A,0 4px 12px #182B4912}
 .source .card,.inserted-card{border:2px solid var(--node-border-default);box-shadow:none;transition:box-shadow 180ms ease-out}
 .receiver{outline:2px solid var(--node-border-default);outline-offset:0;box-shadow:none;transition:box-shadow 180ms ease-out}
 .node-group:hover .source .card,.inserted-node:hover .inserted-card{border-color:var(--node-border-hover)}

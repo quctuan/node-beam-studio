@@ -145,7 +145,7 @@ code['M16']="Lấy settle()/render() trong wire-motion.js. Gọi mỗi RAF; ch�
 code['M17']="```js\nconst h=Math.max(64,Math.min(240,Math.hypot(b.x-a.x,b.y-a.y)*.45));\nconst d=`M ${a.x} ${a.y} C ${a.x+h} ${a.y} ${b.x-h} ${b.y} ${b.x} ${b.y}`;\n```\nDùng chung wirePath() cho dây gốc, node chèn và preview."
 code['M18']="resolveTarget() kiểm tra body hit hoặc gần cổng, filter kind/occupancy/cycle trước khi commit. finishCable() dùng valid=false để chạy retract260ms, giữ nguyên graph."
 code['M19']="""```css
-:root { --node-target-shadow:0 0 0 1px #1188FF26,0 16px 48px #182B4933,0 4px 12px #182B4924; }
+:root { --node-target-shadow:0 0 0 1px #1188FF14,0 16px 48px #182B491A,0 4px 12px #182B4912; }
 .node-group.is-drop-target .receiver {
   outline-color:#1188FF;
   box-shadow:var(--node-target-shadow);
