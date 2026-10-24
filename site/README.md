@@ -21,3 +21,7 @@ Focused proof: visual screenshots for canvas/annotation, Play demo, Annotation/B
 ## Camera activation fix2.1.2
 
 Node motion now invokes its existing Fit action after the iframe is ready and visible on every tab activation, including first load, browser navigation and return from Node beam. Pending activation waits are cancelled when switching away. This resets only camera framing; graph/node state is preserved. Focused local check zoomed off-fit, switched away/back and verified autoFit plus all three nodes inside viewport.
+
+## Glass navigation2.1.3
+
+The shared header is a fixed overlay with a translucent gradient,20px backdrop blur and saturation. The canvas now fills100dvh behind it, reclaiming the previous84px reserved header strip. Compact Annotation layouts reserve their internal control row to avoid overlapping the floating menu. Tab switching, Fit and Annotation/Back were verified locally.

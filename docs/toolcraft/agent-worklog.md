@@ -248,3 +248,9 @@ Request: Push all code of the current website to quctuan/node-beam-studio.
 Owner: site/ and motion/ packaging; existing beam source retained from latest remote main. Later focused packaging checks only; no renderer/schema changes.
 Decision: Add portable integration build and local preview, pin exact deployed beam frontend/API, include editable motion source and9 Markdown notes. Exclude credentials, dependencies, generated outputs and diagnostics. Vercel build uses build:site so Git-connected deployments preserve the shared site.
 Verification: Dependency-free site build from a clean source tree, local two-tab/automaticFit/MD browser check, source archive checks and staged-file secret-pattern review.
+
+## Glass navigation · 2026-10-24
+
+Active change: node-site-glass-navigation
+Request: Blend the top navigation into the canvas with gradient blur and remove the opaque reserved strip.
+Changed owner: site/hub.css and site/refresh-motion-ui.py. Fixed glass overlay, full-height shared canvas, compact annotation layout spacing. Beam renderer/runtime untouched. Focused local browser checks passed: viewport top0/full height,20px blur, tab switching, autoFit, Annotation/Back. No aggregate/performance checks requested.
