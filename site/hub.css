@@ -8,3 +8,6 @@
 main{height:100dvh;border-top:0}
 @media(max-width:480px){main{height:100dvh}}
 @supports not (backdrop-filter:blur(1px)){.hub-header:before{background:linear-gradient(135deg,#fffffff0,#fff1f8e8,#f2f7ffeb)}}
+
+/* The annotation sidebar owns this view; restore navigation on Back. */
+.hub-header[hidden]{display:none}

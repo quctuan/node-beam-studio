@@ -1,6 +1,6 @@
 # Fiora — motion annotations
 
-Version **1.4.4**. Sáu note gốc được giữ theo bản trước. Ba yêu cầu wire nằm riêng trong M16–M18. M19 là node target border/elevation, độc lập với M02.
+Version **1.4.5**. Sáu note gốc được giữ theo bản trước. Ba yêu cầu wire nằm riêng trong M16–M18. M19 là node target border/elevation, độc lập với M02.
 
 [Preview](https://fiora-node-motion.vercel.app/?lab=1) · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
 
@@ -704,7 +704,7 @@ Thời gian/physics Magnific được kiểm tra read-only từ deployed assets;
 
 # Fiora / Connection success · dashed to solid
 
-Version **1.4.4** · Yêu cầu riêng · M16 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
+Version **1.4.5** · Yêu cầu riêng · M16 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
 
 <a id="m16"></a>
 
@@ -756,7 +756,7 @@ Lấy settle()/render() trong wire-motion.js. Gọi mỗi RAF; chỉ reveal grap
 
 # Fiora / Soft curved wire routing
 
-Version **1.4.4** · Yêu cầu riêng · M17 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
+Version **1.4.5** · Yêu cầu riêng · M17 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
 
 <a id="m17"></a>
 
@@ -803,7 +803,7 @@ Dùng chung wirePath() cho dây gốc, node chèn và preview.
 
 # Fiora / Node-body drop · auto detect & retract
 
-Version **1.4.4** · Yêu cầu riêng · M18 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
+Version **1.4.5** · Yêu cầu riêng · M18 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
 
 <a id="m18"></a>
 
@@ -850,7 +850,7 @@ resolveTarget() kiểm tra body hit hoặc gần cổng, filter kind/occupancy/c
 
 # Fiora / Node target · blue border & elevation
 
-Version **1.4.4** · Yêu cầu riêng · M19 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
+Version **1.4.5** · Yêu cầu riêng · M19 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
 
 <a id="m19"></a>
 

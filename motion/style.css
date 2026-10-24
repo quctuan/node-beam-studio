@@ -64,3 +64,8 @@ html,body{width:100%;height:100%;overflow:hidden}.viewport{background-color:#f7f
 @media(prefers-reduced-motion:reduce){.source .card,.inserted-card,.receiver,.generator-toolbar{transition:none}}
 
 .input-content p.is-placeholder{color:#A1A1AA}
+
+/* Annotation view: canvas + handoff sidebar only; no lab header or timeline. */
+body:not(.immersive) .lab,body:not(.immersive) .transport{display:none!important}
+body:not(.immersive) main{height:100dvh!important;min-height:0}
+body:not(.immersive) #annotations{top:0!important;bottom:0!important;max-height:100dvh}
