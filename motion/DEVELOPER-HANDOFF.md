@@ -1,6 +1,6 @@
 # Fiora — motion annotations
 
-Version **1.4.2**. Sáu note gốc được giữ theo bản trước. Ba yêu cầu mới nằm riêng trong M16–M18; áp dụng M16–M18 cho behavior wire mới.
+Version **1.4.3**. Sáu note gốc được giữ theo bản trước. Ba yêu cầu wire nằm riêng trong M16–M18. M19 là node target border/elevation, độc lập với M02.
 
 [Preview](https://fiora-node-motion.vercel.app/?lab=1) · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
 
@@ -231,14 +231,6 @@ CSS/JS trong ZIP là source đầy đủ đang chạy; code snippets trong MD gi
 
 Thời gian/physics Magnific được kiểm tra read-only từ deployed assets; palette và UI theo Fiora. Dash preview và inward ring là mapping theo yêu cầu; không tuyên bố active-generation frame parity. Source không chứa credentials, private reference screenshot hay Magnific source bundles.
 
-
-### Node body feedback · v1.4.2
-
-Figma states: Default 2px solid #E4E4E7; Hover #D4D4D8; Click-on #1188FF; Locked 2px dashed #D4D4D8 with connector opacity .5, no drag/connect. Existing connections alone do not imply selection. Empty/unselected receiver is default. Applies to original text/image/generator and inserted nodes. The original generator toolbar is hidden until hover/selection and remains available while locked to unlock.
-
-When resolveTarget finds a compatible available input, connector-feedback.js adds `.is-drop-target` to its owner. No scaling or geometry displacement. Border/outline becomes 2px #1188FF; shadow `0 0 0 1px #1188FF14, 0 0 24px -4px #1188FF29, 0 8px 24px #18181B1A, 0 1px 4px #18181B1A`. Border transitions 140ms ease-out; shadow180ms ease-out, delay0, no repeat. Leave/drop/Escape/pointercancel/window blur removes the target class on the next frame; shadow fades out180ms and border returns to current default/hover/selected state. Processing beam takes border precedence. Reduced motion changes highlight immediately; dots disabled and existing target ring static.
-
-Preview: disconnect both wires; click canvas background => neutral border and hidden toolbar. Hover => gray border and toolbar; click card => blue border. Drag an output over generator body => blue border with elevation plus one inward connector ring/at most8 particles; move out/Escape => cleanup. Repeat on inserted nodes; occupied/wrong-kind/self/cycle/locked targets never highlight. Hover generator, Lock node => dashed border, connector opacity .5, no node drag or accepted cable; Unlock node restores selection.
 
 
 ---
@@ -712,7 +704,7 @@ Thời gian/physics Magnific được kiểm tra read-only từ deployed assets;
 
 # Fiora / Connection success · dashed to solid
 
-Version **1.4.2** · Yêu cầu riêng · M16 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
+Version **1.4.3** · Yêu cầu riêng · M16 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
 
 <a id="m16"></a>
 
@@ -764,7 +756,7 @@ Lấy settle()/render() trong wire-motion.js. Gọi mỗi RAF; chỉ reveal grap
 
 # Fiora / Soft curved wire routing
 
-Version **1.4.2** · Yêu cầu riêng · M17 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
+Version **1.4.3** · Yêu cầu riêng · M17 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
 
 <a id="m17"></a>
 
@@ -811,7 +803,7 @@ Dùng chung wirePath() cho dây gốc, node chèn và preview.
 
 # Fiora / Node-body drop · auto detect & retract
 
-Version **1.4.2** · Yêu cầu riêng · M18 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
+Version **1.4.3** · Yêu cầu riêng · M18 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
 
 <a id="m18"></a>
 
@@ -852,3 +844,76 @@ resolveTarget() kiểm tra body hit hoặc gần cổng, filter kind/occupancy/c
 ```
 
 **Nguồn tham chiếu:** Separate Fiora wire interaction requirements.
+
+
+---
+
+# Fiora / Node target · blue border & elevation
+
+Version **1.4.3** · Yêu cầu riêng · M19 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
+
+<a id="m19"></a>
+
+## 10. Node target · blue border & elevation · M19
+
+Kéo dây vào node hợp lệ: viền xanh branding, shadow nâng khối rõ khỏi canvas.
+
+- **Trigger:** Live cable resolves a compatible available input by node body hit or connector proximity58 screen px
+- **Duration / easing:** Border0ms · shadow180ms; delay0ms, no repeat · Shadow ease-out (cubic-bezier(0,0,.58,1)); border immediate
+- **Thông số:** Border/outline2px #1188FF immediately; shadow 0 0 0 1px #1188FF26,0 16px 48px #182B4933,0 4px 12px #182B4924. Shadow ramps0→1 over180ms; no transform or scale.
+- **Exit / cleanup:** Leave/drop/Escape/pointercancel/blur clears target on next frame; underlying default/hover/selected/locked border restores immediately and shadow fades180ms.
+- **Reduced motion:** Static blue border + full elevation immediately; no transitions. M02 ring/particle reduction remains separate.
+- **Trạng thái implement:** Implemented for generator and all inserted compatible nodes. Invalid/occupied/wrong-kind/self/cycle/locked targets excluded. Separate from M02 connector feedback.
+- **Code:** `connector-feedback.js: render(), syncSelection()`; `wire-interactions.js: resolveTarget()`; `style.css: --node-target-shadow, .is-drop-target, selected specificity`
+- **Preview:** Kéo output T/ảnh vào thân generator hoặc node Insert tương thích; giữ để xem viền xanh + shadow. Kéo ra/nhấn Escape để trả trạng thái. Click node: xanh ngay ở pointerdown, kể cả đang hover.
+- **Download riêng:** [M19.md](https://fiora-node-motion.vercel.app/docs/M19.md)
+
+### Code / cách áp dụng
+
+```css
+:root { --node-target-shadow:0 0 0 1px #1188FF26,0 16px 48px #182B4933,0 4px 12px #182B4924; }
+.node-group.is-drop-target .receiver {
+  outline-color:#1188FF;
+  box-shadow:var(--node-target-shadow);
+  transition:box-shadow 180ms ease-out;
+}
+.inserted-node.is-drop-target .inserted-card {
+  border-color:#1188FF;
+  box-shadow:var(--node-target-shadow);
+  transition:box-shadow 180ms ease-out;
+}
+/* No border/outline color transitions. Selected selectors match/exceed hover specificity. */
+.node-group[data-node-state=selected] .receiver { outline-color:#1188FF; }
+@media(prefers-reduced-motion:reduce) {
+  .receiver,.source .card,.inserted-card { transition:none; }
+}
+```
+
+State precedence: processing beam owns its border; locked inputs reject cable. Otherwise valid target > clicked selected > hover > default. Selection is synchronous inside document pointerdown capture via syncSelection(), not deferred until the animation RAF. Default2px#E4E4E7, hover#D4D4D8, click#1188FF. No connection alone implies selection. Generator toolbar is visible on hover/selection/target/locked. Original source cards share instant selection, but have no compatible incoming port so never accept cable drops.
+
+Node body target resolves by whole380x380 scene rect or port proximity58 screenpx (drop threshold28). Class toggles on owner, separate from M02 SVG ring/particles. Shadow is scene CSS px and scales with zoom; no translate/scale, so cable centers and hit bounds stay aligned. Shadow ramps with CSS ease-out for180ms; on quick re-entry CSS transitions continue from current interpolated shadow. Blue border appears immediately with no delay. Cleanup on leave/release/Escape/pointercancel/blur restores underlying state; target wrapper and SVG connector feedback cleaned independently. Browser/SPA unmount must remove document/window event listeners as noted in M12.
+
+Manual QA: disconnect both wires, deselect canvas => default. Hover => gray; pointerdown card => blue immediately, not overridden by hover. Drag original output into compatible generator or inserted body => blue + clearly elevated shadow; leave/Escape => no leftover glow/shadow. Occupied/wrong-kind/self/cycle/locked => no feedback. Reduced motion => static border/shadow, no transition. This note is independent of M02 and its MD.
+
+### Toàn bộ thông số chi tiết
+
+```json
+{
+  "status": "adapted",
+  "configuration": {
+    "trigger": "Compatible available input resolved by node-body hit or proximity58 screen px; actual release28px",
+    "border": "2px solid #1188FF; immediate (0ms)",
+    "shadow": "0 0 0 1px #1188FF26,0 16px 48px #182B4933,0 4px 12px #182B4924",
+    "entry": "border0ms, shadow180ms ease-out",
+    "exit": "Remove target class on leave/drop/cancel/blur; border restores immediately; shadow fades180ms",
+    "reducedMotion": "Static highlight/shadow, no transitions, existing ring/dots reduced-motion behavior unchanged",
+    "units": "Scene CSS px at100% canvas zoom; no geometry transform"
+  },
+  "clickOn": {
+    "border": "2px solid #1188FF",
+    "entry": "pointerdown capture synchronously sets state; border0ms and no color transition; selection wins over hover"
+  }
+}
+```
+
+**Nguồn tham chiếu:** User-requested node elevation reference and Fiora Figma5605:73974; elevation values are Fiora implementation mapping, not measured Magnific constants.

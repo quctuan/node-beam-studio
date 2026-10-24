@@ -11,3 +11,5 @@ For every new or changed motion/interaction requested by the designer:
 Current approved baseline: v1.4.0. Fullscreen infinite canvas; blue beam #1188FF/#8FC7FF; blank white loading node; live target one inward ring1300ms/max8dots. Legacy automatic Connect spark is a separate reference sample, not the current live-drag spec. Keep published docs aligned with actual code.
 
 Latest user scope: preserve the original six notes; three wire requirements are separate additional notes M16 success fill, M17 soft routing, M18 node-body drop/invalid retract. Do not merge them into old notes.
+
+User change2026-10-24: M19 is a separate tenth annotation and separate MD for node target blue border/elevation. Do not merge it into M02. Click-on border must switch synchronously on pointerdown (0ms), selected overrides hover. Target class must persist while same target is held; do not remove/readd each RAF as geometry reads restart the shadow transition.

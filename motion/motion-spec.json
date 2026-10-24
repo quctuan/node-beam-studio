@@ -1,5 +1,5 @@
 {
-  "version": "1.4.2",
+  "version": "1.4.3",
   "date": "2026-10-23",
   "title": "Fiora · Six motion annotations",
   "figma": "https://www.figma.com/design/WAU03VCjRzoii657s3A0b5/Fiora?node-id=1103-30034",
@@ -134,7 +134,7 @@
       "duration": "1300 ms / inward ring; continuous while target is nearby",
       "easing": "radius quadratic ease-out; opacity sin(π·phase)",
       "summary": "Một vòng co nhẹ vào tâm; halo mờ và ít dot hơn.",
-      "parameters": "One ring only. radius=portScreenRadius+14*(1-phase)^2; opacity=sin(pi*phase)*.28; stroke1px #1188FF. Halo radius+12 at .025. Native26-particle pool; at most8 visible dots, groupopacity .65. Snap within28 screenpx. Node body target: border2px #1188FF + elevated shadow (180ms ease-out); clear on leave/drop/cancel/blur; locked targets excluded.",
+      "parameters": "One ring only. radius=portScreenRadius+14*(1-phase)^2; opacity=sin(pi*phase)*.28; stroke1px #1188FF. Halo radius+12 at .025. Native26-particle pool; at most8 visible dots, groupopacity .65. Snap within28 screenpx.",
       "evidence": "Magnific particle constants · user-requested inward rings",
       "source": "https://cdn.magnific.com/ait/assets/SpacesConnectionLine.LZqBVAXs.v2.css",
       "previewTime": 1.42,
@@ -217,15 +217,7 @@
         "portSizePx": 28,
         "borderWidthPx": 1.5
       },
-      "notes": "Live target behavior is1300ms/one ring/max8dots. Automatic Connect playback uses a legacy900ms pulse; use live drag for this annotation.",
-      "nodeBodyFeedback": {
-        "trigger": "Compatible available input resolved by node-body hit or proximity58 screen px; actual release28px",
-        "border": "2px solid #1188FF",
-        "shadow": "0 0 0 1px #1188FF14,0 0 24px -4px #1188FF29,0 8px 24px #18181B1A,0 1px 4px #18181B1A",
-        "entry": "border140ms/shadow180ms ease-out",
-        "exit": "Remove target class on leave/drop/cancel/blur; underlying state restored",
-        "reducedMotion": "Static highlight/shadow, no transitions, existing ring/dots reduced-motion behavior unchanged"
-      }
+      "notes": "Live target behavior is1300ms/one ring/max8dots. Automatic Connect playback uses a legacy900ms pulse; use live drag for this annotation."
     },
     {
       "id": "M03",
@@ -659,6 +651,46 @@
       "downloadMarkdown": "docs/M18.md",
       "previewURL": "https://fiora-node-motion.vercel.app/?lab=1&v=1.4.1",
       "previewSteps": "Kéo output vào thân node để thử; thả ra nền để xem thu dây."
+    },
+    {
+      "id": "M19",
+      "order": 10,
+      "name": "Node target · blue border & elevation",
+      "version": "1.4.3",
+      "status": "adapted",
+      "trigger": "Live cable resolves a compatible available input by node body hit or connector proximity58 screen px",
+      "duration": "Border0ms · shadow180ms; delay0ms, no repeat",
+      "easing": "Shadow ease-out (cubic-bezier(0,0,.58,1)); border immediate",
+      "summary": "Kéo dây vào node hợp lệ: viền xanh branding, shadow nâng khối rõ khỏi canvas.",
+      "parameters": "Border/outline2px #1188FF immediately; shadow 0 0 0 1px #1188FF26,0 16px 48px #182B4933,0 4px 12px #182B4924. Shadow ramps0→1 over180ms; no transform or scale.",
+      "exit": "Leave/drop/Escape/pointercancel/blur clears target on next frame; underlying default/hover/selected/locked border restores immediately and shadow fades180ms.",
+      "reducedMotion": "Static blue border + full elevation immediately; no transitions. M02 ring/particle reduction remains separate.",
+      "implementation": "Implemented for generator and all inserted compatible nodes. Invalid/occupied/wrong-kind/self/cycle/locked targets excluded. Separate from M02 connector feedback.",
+      "code": [
+        "connector-feedback.js: render(), syncSelection()",
+        "wire-interactions.js: resolveTarget()",
+        "style.css: --node-target-shadow, .is-drop-target, selected specificity"
+      ],
+      "previewMode": "interaction",
+      "previewTime": 0,
+      "previewSteps": "Kéo output T/ảnh vào thân generator hoặc node Insert tương thích; giữ để xem viền xanh + shadow. Kéo ra/nhấn Escape để trả trạng thái. Click node: xanh ngay ở pointerdown, kể cả đang hover.",
+      "previewURL": "https://fiora-node-motion.vercel.app/?lab=1",
+      "docsAnchor": "m19",
+      "downloadMarkdown": "docs/M19.md",
+      "evidence": "User-requested node elevation reference and Fiora Figma5605:73974; elevation values are Fiora implementation mapping, not measured Magnific constants",
+      "configuration": {
+        "trigger": "Compatible available input resolved by node-body hit or proximity58 screen px; actual release28px",
+        "border": "2px solid #1188FF; immediate (0ms)",
+        "shadow": "0 0 0 1px #1188FF26,0 16px 48px #182B4933,0 4px 12px #182B4924",
+        "entry": "border0ms, shadow180ms ease-out",
+        "exit": "Remove target class on leave/drop/cancel/blur; border restores immediately; shadow fades180ms",
+        "reducedMotion": "Static highlight/shadow, no transitions, existing ring/dots reduced-motion behavior unchanged",
+        "units": "Scene CSS px at100% canvas zoom; no geometry transform"
+      },
+      "clickOn": {
+        "border": "2px solid #1188FF",
+        "entry": "pointerdown capture synchronously sets state; border0ms and no color transition; selection wins over hover"
+      }
     }
   ],
   "artifacts": {
@@ -711,7 +743,8 @@
       "border": "2px solid #D4D4D8"
     },
     "selected": {
-      "border": "2px solid #1188FF"
+      "border": "2px solid #1188FF",
+      "entry": "pointerdown capture synchronously sets state; border0ms and no color transition; selection wins over hover"
     },
     "locked": {
       "border": "2px dashed #D4D4D8",
@@ -720,11 +753,12 @@
     },
     "dropTarget": {
       "trigger": "Compatible available input resolved by node-body hit or proximity58 screen px; actual release28px",
-      "border": "2px solid #1188FF",
-      "shadow": "0 0 0 1px #1188FF14,0 0 24px -4px #1188FF29,0 8px 24px #18181B1A,0 1px 4px #18181B1A",
-      "entry": "border140ms/shadow180ms ease-out",
-      "exit": "Remove target class on leave/drop/cancel/blur; underlying state restored",
-      "reducedMotion": "Static highlight/shadow, no transitions, existing ring/dots reduced-motion behavior unchanged"
+      "border": "2px solid #1188FF; immediate (0ms)",
+      "shadow": "0 0 0 1px #1188FF26,0 16px 48px #182B4933,0 4px 12px #182B4924",
+      "entry": "border0ms, shadow180ms ease-out",
+      "exit": "Remove target class on leave/drop/cancel/blur; border restores immediately; shadow fades180ms",
+      "reducedMotion": "Static highlight/shadow, no transitions, existing ring/dots reduced-motion behavior unchanged",
+      "units": "Scene CSS px at100% canvas zoom; no geometry transform"
     }
   }
 }

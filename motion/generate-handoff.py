@@ -4,7 +4,7 @@ import json
 
 root = Path(__file__).resolve().parent
 spec = json.loads((root / 'motion-spec.json').read_text())
-assert len(spec['animations']) == 9
+assert len(spec['animations']) == 10
 base = 'https://fiora-node-motion.vercel.app/'
 code = {
 'M01': '''```js
@@ -140,10 +140,35 @@ def effect(a):
     body += '**Nguồn tham chiếu:** '+a['evidence']+'.'+(' [CSS/JS reference]('+a['source']+')' if a.get('source') else '')+'\n'
     return body
 
-intro=f"# Fiora — motion annotations\n\nVersion **{spec['version']}**. Sáu note gốc được giữ theo bản trước. Ba yêu cầu mới nằm riêng trong M16–M18; áp dụng M16–M18 cho behavior wire mới.\n\n[Preview]({base}?lab=1) · [Source ZIP]({base}fiora-motion-source.zip)\n\n"
+intro=f"# Fiora — motion annotations\n\nVersion **{spec['version']}**. Sáu note gốc được giữ theo bản trước. Ba yêu cầu wire nằm riêng trong M16–M18. M19 là node target border/elevation, độc lập với M02.\n\n[Preview]({base}?lab=1) · [Source ZIP]({base}fiora-motion-source.zip)\n\n"
 code['M16']="Lấy settle()/render() trong wire-motion.js. Gọi mỗi RAF; chỉ reveal graph edge khi onComplete. Endpoint morph160ms, fill320ms và dash fade cùng phase."
 code['M17']="```js\nconst h=Math.max(64,Math.min(240,Math.hypot(b.x-a.x,b.y-a.y)*.45));\nconst d=`M ${a.x} ${a.y} C ${a.x+h} ${a.y} ${b.x-h} ${b.y} ${b.x} ${b.y}`;\n```\nDùng chung wirePath() cho dây gốc, node chèn và preview."
 code['M18']="resolveTarget() kiểm tra body hit hoặc gần cổng, filter kind/occupancy/cycle trước khi commit. finishCable() dùng valid=false để chạy retract260ms, giữ nguyên graph."
+code['M19']="""```css
+:root { --node-target-shadow:0 0 0 1px #1188FF26,0 16px 48px #182B4933,0 4px 12px #182B4924; }
+.node-group.is-drop-target .receiver {
+  outline-color:#1188FF;
+  box-shadow:var(--node-target-shadow);
+  transition:box-shadow 180ms ease-out;
+}
+.inserted-node.is-drop-target .inserted-card {
+  border-color:#1188FF;
+  box-shadow:var(--node-target-shadow);
+  transition:box-shadow 180ms ease-out;
+}
+/* No border/outline color transitions. Selected selectors match/exceed hover specificity. */
+.node-group[data-node-state=selected] .receiver { outline-color:#1188FF; }
+@media(prefers-reduced-motion:reduce) {
+  .receiver,.source .card,.inserted-card { transition:none; }
+}
+```
+
+State precedence: processing beam owns its border; locked inputs reject cable. Otherwise valid target > clicked selected > hover > default. Selection is synchronous inside document pointerdown capture via syncSelection(), not deferred until the animation RAF. Default2px#E4E4E7, hover#D4D4D8, click#1188FF. No connection alone implies selection. Generator toolbar is visible on hover/selection/target/locked. Original source cards share instant selection, but have no compatible incoming port so never accept cable drops.
+
+Node body target resolves by whole380x380 scene rect or port proximity58 screenpx (drop threshold28). Class toggles on owner, separate from M02 SVG ring/particles. Shadow is scene CSS px and scales with zoom; no translate/scale, so cable centers and hit bounds stay aligned. Shadow ramps with CSS ease-out for180ms; on quick re-entry CSS transitions continue from current interpolated shadow. Blue border appears immediately with no delay. Cleanup on leave/release/Escape/pointercancel/blur restores underlying state; target wrapper and SVG connector feedback cleaned independently. Browser/SPA unmount must remove document/window event listeners as noted in M12.
+
+Manual QA: disconnect both wires, deselect canvas => default. Hover => gray; pointerdown card => blue immediately, not overridden by hover. Drag original output into compatible generator or inserted body => blue + clearly elevated shadow; leave/Escape => no leftover glow/shadow. Occupied/wrong-kind/self/cycle/locked => no feedback. Reduced motion => static border/shadow, no transition. This note is independent of M02 and its MD.
+"""
 docs=root/'docs';docs.mkdir(exist_ok=True)
 parts=[]
 for a in spec['animations']:
@@ -155,4 +180,4 @@ for a in spec['animations']:
         body=f"# Fiora / {a['name']}\n\nVersion **{spec['version']}** · Yêu cầu riêng · {a['id']} · [Source ZIP]({base}fiora-motion-source.zip)\n\n"+effect(a)
         file.write_text(body);parts.append(body)
 (root/'DEVELOPER-HANDOFF.md').write_text(intro+'\n\n---\n\n'.join(parts))
-print('Preserved6 original MD files; generated3 separate new notes + combined handoff')
+print('Preserved6 original MD files; generated4 separate notes + combined handoff')

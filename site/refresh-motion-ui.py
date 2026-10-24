@@ -4,7 +4,7 @@ import sys,re
 p=Path(sys.argv[1]);f=p/'index.html';t=f.read_text()
 start=t.index('<div class="product-nav">');end=t.index('<div id="sourceText"',start)
 t=t[:start]+'''<div class="product-nav"><div class="workspace-context"><span class="workspace-symbol"><img class="icon" src="assets/layout-grid.svg" alt=""></span><span><strong>Motion playground</strong><small>Connect. Explore. Create.</small></span></div><button class="canvas-play" id="canvas-play"><span aria-hidden="true">▶</span> Play demo</button></div>\n'''+t[end:]
-t=t.replace('Fiora <span>/ Motion study</span>','Node motion <span>/ Playground</span>').replace('Magnific reference · 23.10.2026','Animation preview & developer handoff').replace('Motion annotations','Motion library').replace('↓ Developer MD','↓ All notes').replace('↓ Source ZIP · v1.4.2','↓ Source code').replace('Kéo nền để pan · Scroll / pinch để zoom · 0 để Fit · Motion để xem animation.','Drag canvas to pan · Scroll to zoom · Open Annotation for motion specs')
+t=t.replace('Fiora <span>/ Motion study</span>','Node motion <span>/ Playground</span>').replace('Magnific reference · 23.10.2026','Animation preview & developer handoff').replace('Motion annotations','Motion library').replace('↓ Developer MD','↓ All notes').replace('↓ Source ZIP · v1.4.3','↓ Source code').replace('Kéo nền để pan · Scroll / pinch để zoom · 0 để Fit · Motion để xem animation.','Drag canvas to pan · Scroll to zoom · Open Annotation for motion specs')
 f.write_text(t)
 f=p/'app.js';t=f.read_text();t+="\n$('#canvas-play').onclick=()=>run('demo');\n";f.write_text(t)
 f=p/'style.css';t=f.read_text();t+='''
