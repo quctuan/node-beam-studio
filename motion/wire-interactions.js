@@ -41,7 +41,7 @@ export function installWireInteractions(api){
   const scale=window.motionScale,used=[...edges.values()].filter(e=>!e.removing&&e.kind===kind);
   const candidates=[{id:'generator',p:api.ends[kind],rect:api.generatorPosition()},...[...nodes.values()].filter(n=>n.id!==source&&n.kind===kind).map(n=>({id:n.id,p:endpoint(n.id,false,kind),rect:n}))];
   function cycle(target){const seen=new Set(),stack=[target];while(stack.length){const id=stack.pop();if(id===source)return true;if(seen.has(id))continue;seen.add(id);for(const e of used)if(e.from===id)stack.push(e.to);}return false;}
-  return candidates.filter(n=>!used.some(e=>e.to===n.id&&e.from!==source)&&!cycle(n.id)).map(n=>({...n,body:p.x>=n.rect.x&&p.x<=n.rect.x+380&&p.y>=n.rect.y&&p.y<=n.rect.y+380,d:Math.hypot(p.x-n.p.x,p.y-n.p.y)*scale})).filter(n=>n.body||n.d<proximity).sort((a,b)=>Number(b.body)-Number(a.body)||a.d-b.d)[0];
+  return candidates.filter(n=>document.querySelector(`[data-node="${n.id}"]`)?.dataset.nodeState!=='locked').filter(n=>!used.some(e=>e.to===n.id&&e.from!==source)&&!cycle(n.id)).map(n=>({...n,body:p.x>=n.rect.x&&p.x<=n.rect.x+380&&p.y>=n.rect.y&&p.y<=n.rect.y+380,d:Math.hypot(p.x-n.p.x,p.y-n.p.y)*scale})).filter(n=>n.body||n.d<proximity).sort((a,b)=>Number(b.body)-Number(a.body)||a.d-b.d)[0];
  }
  function findTarget(kind,p,source){return resolveTarget(kind,p,source)?.id;}
  function beginCable(kind,source){activate();held={kind,source};}

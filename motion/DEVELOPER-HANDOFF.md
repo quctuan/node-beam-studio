@@ -1,6 +1,6 @@
 # Fiora — motion annotations
 
-Version **1.4.1**. Sáu note gốc được giữ theo bản trước. Ba yêu cầu mới nằm riêng trong M16–M18; áp dụng M16–M18 cho behavior wire mới.
+Version **1.4.2**. Sáu note gốc được giữ theo bản trước. Ba yêu cầu mới nằm riêng trong M16–M18; áp dụng M16–M18 cho behavior wire mới.
 
 [Preview](https://fiora-node-motion.vercel.app/?lab=1) · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
 
@@ -230,6 +230,15 @@ Live drag là bản được duyệt. Automatic Connect timeline còn sample pul
 CSS/JS trong ZIP là source đầy đủ đang chạy; code snippets trong MD giải thích các phần cần dùng. Demo có clock để pause/seek và giữ CSS Animation.currentTime; production dùng backend events và animation clock thật. Các helper đang tham chiếu DOM/selectors của scene, không phải React component độc lập. Bố cục và chức năng canvas hiện có vẫn hoạt động; handoff chỉ giới hạn6 hiệu ứng được yêu cầu.
 
 Thời gian/physics Magnific được kiểm tra read-only từ deployed assets; palette và UI theo Fiora. Dash preview và inward ring là mapping theo yêu cầu; không tuyên bố active-generation frame parity. Source không chứa credentials, private reference screenshot hay Magnific source bundles.
+
+
+### Node body feedback · v1.4.2
+
+Figma states: Default 2px solid #E4E4E7; Hover #D4D4D8; Click-on #1188FF; Locked 2px dashed #D4D4D8 with connector opacity .5, no drag/connect. Existing connections alone do not imply selection. Empty/unselected receiver is default. Applies to original text/image/generator and inserted nodes. The original generator toolbar is hidden until hover/selection and remains available while locked to unlock.
+
+When resolveTarget finds a compatible available input, connector-feedback.js adds `.is-drop-target` to its owner. No scaling or geometry displacement. Border/outline becomes 2px #1188FF; shadow `0 0 0 1px #1188FF14, 0 0 24px -4px #1188FF29, 0 8px 24px #18181B1A, 0 1px 4px #18181B1A`. Border transitions 140ms ease-out; shadow180ms ease-out, delay0, no repeat. Leave/drop/Escape/pointercancel/window blur removes the target class on the next frame; shadow fades out180ms and border returns to current default/hover/selected state. Processing beam takes border precedence. Reduced motion changes highlight immediately; dots disabled and existing target ring static.
+
+Preview: disconnect both wires; click canvas background => neutral border and hidden toolbar. Hover => gray border and toolbar; click card => blue border. Drag an output over generator body => blue border with elevation plus one inward connector ring/at most8 particles; move out/Escape => cleanup. Repeat on inserted nodes; occupied/wrong-kind/self/cycle/locked targets never highlight. Hover generator, Lock node => dashed border, connector opacity .5, no node drag or accepted cable; Unlock node restores selection.
 
 
 ---
@@ -703,7 +712,7 @@ Thời gian/physics Magnific được kiểm tra read-only từ deployed assets;
 
 # Fiora / Connection success · dashed to solid
 
-Version **1.4.1** · Yêu cầu riêng · M16 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
+Version **1.4.2** · Yêu cầu riêng · M16 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
 
 <a id="m16"></a>
 
@@ -755,7 +764,7 @@ Lấy settle()/render() trong wire-motion.js. Gọi mỗi RAF; chỉ reveal grap
 
 # Fiora / Soft curved wire routing
 
-Version **1.4.1** · Yêu cầu riêng · M17 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
+Version **1.4.2** · Yêu cầu riêng · M17 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
 
 <a id="m17"></a>
 
@@ -802,7 +811,7 @@ Dùng chung wirePath() cho dây gốc, node chèn và preview.
 
 # Fiora / Node-body drop · auto detect & retract
 
-Version **1.4.1** · Yêu cầu riêng · M18 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
+Version **1.4.2** · Yêu cầu riêng · M18 · [Source ZIP](https://fiora-node-motion.vercel.app/fiora-motion-source.zip)
 
 <a id="m18"></a>
 

@@ -1,5 +1,5 @@
 {
-  "version": "1.4.1",
+  "version": "1.4.2",
   "date": "2026-10-23",
   "title": "Fiora · Six motion annotations",
   "figma": "https://www.figma.com/design/WAU03VCjRzoii657s3A0b5/Fiora?node-id=1103-30034",
@@ -134,7 +134,7 @@
       "duration": "1300 ms / inward ring; continuous while target is nearby",
       "easing": "radius quadratic ease-out; opacity sin(π·phase)",
       "summary": "Một vòng co nhẹ vào tâm; halo mờ và ít dot hơn.",
-      "parameters": "One ring only. radius=portScreenRadius+14*(1-phase)^2; opacity=sin(pi*phase)*.28; stroke1px #1188FF. Halo radius+12 at .025. Native26-particle pool; at most8 visible dots, groupopacity .65. Snap within28 screenpx.",
+      "parameters": "One ring only. radius=portScreenRadius+14*(1-phase)^2; opacity=sin(pi*phase)*.28; stroke1px #1188FF. Halo radius+12 at .025. Native26-particle pool; at most8 visible dots, groupopacity .65. Snap within28 screenpx. Node body target: border2px #1188FF + elevated shadow (180ms ease-out); clear on leave/drop/cancel/blur; locked targets excluded.",
       "evidence": "Magnific particle constants · user-requested inward rings",
       "source": "https://cdn.magnific.com/ait/assets/SpacesConnectionLine.LZqBVAXs.v2.css",
       "previewTime": 1.42,
@@ -217,7 +217,15 @@
         "portSizePx": 28,
         "borderWidthPx": 1.5
       },
-      "notes": "Live target behavior is1300ms/one ring/max8dots. Automatic Connect playback uses a legacy900ms pulse; use live drag for this annotation."
+      "notes": "Live target behavior is1300ms/one ring/max8dots. Automatic Connect playback uses a legacy900ms pulse; use live drag for this annotation.",
+      "nodeBodyFeedback": {
+        "trigger": "Compatible available input resolved by node-body hit or proximity58 screen px; actual release28px",
+        "border": "2px solid #1188FF",
+        "shadow": "0 0 0 1px #1188FF14,0 0 24px -4px #1188FF29,0 8px 24px #18181B1A,0 1px 4px #18181B1A",
+        "entry": "border140ms/shadow180ms ease-out",
+        "exit": "Remove target class on leave/drop/cancel/blur; underlying state restored",
+        "reducedMotion": "Static highlight/shadow, no transitions, existing ring/dots reduced-motion behavior unchanged"
+      }
     },
     {
       "id": "M03",
@@ -691,5 +699,32 @@
     "M16",
     "M17",
     "M18"
-  ]
+  ],
+  "nodeStates": {
+    "figma": "https://www.figma.com/design/WAU03VCjRzoii657s3A0b5/Fiora?node-id=5605-73974",
+    "default": {
+      "border": "2px solid #E4E4E7",
+      "shadow": "none",
+      "toolbar": "hidden until hover/selection"
+    },
+    "hover": {
+      "border": "2px solid #D4D4D8"
+    },
+    "selected": {
+      "border": "2px solid #1188FF"
+    },
+    "locked": {
+      "border": "2px dashed #D4D4D8",
+      "connectorOpacity": 0.5,
+      "dragAndConnect": false
+    },
+    "dropTarget": {
+      "trigger": "Compatible available input resolved by node-body hit or proximity58 screen px; actual release28px",
+      "border": "2px solid #1188FF",
+      "shadow": "0 0 0 1px #1188FF14,0 0 24px -4px #1188FF29,0 8px 24px #18181B1A,0 1px 4px #18181B1A",
+      "entry": "border140ms/shadow180ms ease-out",
+      "exit": "Remove target class on leave/drop/cancel/blur; underlying state restored",
+      "reducedMotion": "Static highlight/shadow, no transitions, existing ring/dots reduced-motion behavior unchanged"
+    }
+  }
 }

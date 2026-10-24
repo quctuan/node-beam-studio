@@ -15,3 +15,5 @@ Visual refresh2.1.0: image-only Fiora mark, centered floating navigation per Acc
 User camera requirement (2026-10-24): each activation of Node motion resets its camera to Fit after frame/layout readiness. Preserve graph/node state across tabs, but do not preserve an off-content camera when opening Node motion.
 
 Repository packaging: generated site/dist/, site/motion-source/, root dist/ and .vercel/ are ignored. Do not rely on files outside this repository. Local preview uses site/serve.mjs and never writes production presets.
+
+Release2.1.5 / motion1.4.2: Figma5605:73974 governs node states. Neutral2px#E4E4E7, hover#D4D4D8, click-selected#1188FF, locked dashed#D4D4D8/no drag/connect. Connection alone never selects node. Compatible cable target adds blue border +180ms elevation; cleanup restores underlying state. M02 MD/JSON/native Figma board5518:29088 updated; preserve9 existing notes. Generator toolbar appears on hover/selection/target/lock; empty text input shows placeholder.

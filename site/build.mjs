@@ -17,7 +17,7 @@ for(const name of Object.keys(source.files)){const dest=path.join('motion-source
 execFileSync('python3',['refresh-motion-ui.py',path.join(root,'motion-source')],{stdio:'inherit'});
 execFileSync('node',['build.mjs'],{cwd:path.join(root,'motion-source'),stdio:'inherit'});
 await fs.cp('motion-source/dist','dist/motion',{recursive:true});
-await fs.writeFile('dist/hub-release.json',JSON.stringify({version:JSON.parse(await fs.readFile('package.json','utf8')).version,beamSource:'production dpl_8JdTFGJarguRcX9XYHzFmoeSX6GB',motionVersion:'1.4.1',tabs:['Node beam','Node motion']},null,2));
+await fs.writeFile('dist/hub-release.json',JSON.stringify({version:JSON.parse(await fs.readFile('package.json','utf8')).version,beamSource:'production dpl_8JdTFGJarguRcX9XYHzFmoeSX6GB',motionVersion:JSON.parse(await fs.readFile('../motion/package.json','utf8')).version,tabs:['Node beam','Node motion']},null,2));
 console.log('Built unified hub with same-origin beam, motion, Markdown and source ZIP.');
 
 // Standard Vercel Build Output API: preserve the menu, both apps and the preset function.
